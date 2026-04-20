@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e2f;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+h2{
+  margin-top: 50px;
+  margin-bottom: 0px;
+}
+    .calendar {
+      width: 380px;
+      padding: 20px;
+      background-color: #2e2e3e;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    header button {
+      background: #444;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .day-names, .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      text-align: center;
+    }
+
+    .day-names div {
+      font-weight: bold;
+      padding-bottom: 10px;
+    }
+
+    .days div {
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #3b3b4f;
+      transition: background-color 0.3s ease;
+    }
+
+
+    .legend {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .legend-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+
+
+    .present { background-color: rgb(69, 164, 69) !important; color: white; }
+    .absent { background-color: rgb(255, 89, 0)  !important; color: white; }
+    .no-class { background-color: rgba(209, 209, 72, 0.523) !important; color: black; }
+    .today { border: 2px solid #00bfff; }
+    .sunday { background-color: red !important; color: black; }
+
+    .green { background-color: rgb(69, 164, 69); }
+    .red { background-color: rgb(255, 89, 0) ; }
+    .yellow { background-color: rgba(209, 209, 72, 0.523); }
+    .blue-border { border: 2px solid #00bfff; }
+    .orange { background-color: red; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #2e2e3e;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #444;
+    }
+    th {
+      background-color: #444;
+    }
+    .present {
+      /* color: lightgreen; */
+      font-weight: bold;
+    }
+    .absent {
+      /* color: tomato; */
+      font-weight: bold;
+    }
+
+    #statusFilter {
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #statusFilter option {
+      background-color: #333;
+      color: white;
+    }
+
+    .filter-container {
+      text-align: center;
+    }
+
+    .filter-container label {
+      margin-right: 10px;
+      font-size: 16px;
+    }
+/* media query */
+
+
+
+@media (max-width: 768px) {
+  .calendar {
+    width: 90%;
+    padding: 15px;
+  }
+
+  header h2 {
+    font-size: 18px;
+  }
+
+  header button {
+    padding: 5px 8px;
+    font-size: 14px;
+  }
+
+  .day-names div,
+  .days div {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .legend {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .legend span {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+  }
+
+  .legend-box {
+    width: 12px;
+    height: 12px;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    gap: 10px;
+  }
+
+  .calendar {
+    width: 95%;
+    padding: 10px;
+  }
+
+  header h2 {
+    font-size: 16px;
+  }
+
+  .day-names div,
+  .days div {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .legend {
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 8px;
+  }
+
+  h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="attendance_details" style="text-align: left;"></div>
+<div class="calendar">
+  <header>
+    <button onclick="prevMonth()">&#8592;</button>
+    <h2 id="monthYear"></h2>
+    <button onclick="nextMonth()">&#8594;</button>
+  </header>
+
+  <div class="day-names">
+    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div>
+    <div>Thu</div><div>Fri</div><div>Sat</div>
+  </div>
+
+  <div class="days" id="calendarDays"></div>
+
+  <div class="legend">
+    <span><span class="legend-box green"></span> Present</span>
+    <span><span class="legend-box red"></span> Absent</span>
+    <span><span class="legend-box yellow"></span> No Class</span>
+    <span><span class="legend-box orange"></span> Sunday</span>
+    <span><span class="legend-box blue-border"></span> Today</span>
+  </div>
+</div>
+
+
+<!-- details table -->
+
+<h2>Student Attendance Record</h2>
+
+<!-- Dropdown Filter -->
+<div style="margin-top: 20px;">
+  <label for="statusFilter">Filter by Status: </label>
+  <select id="statusFilter" onchange="filterAttendance(this.value)">
+    <option value="all">All</option>
+    <option value="Present">Present</option>
+    <option value="Absent">Absent</option>
+  </select>
+</div>
+
+<table id="attendanceTable" border="1" style="width: 100%; color: white;">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Data will go here -->
+  </tbody>
+</table>
+
+
+<script>
+  const monthYear = document.getElementById('monthYear');
+  const calendarDays = document.getElementById('calendarDays');
+  let currentDate = new Date();
+  let attendance = {};
+
+  function renderCalendar(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const today = new Date();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+
+    calendarDays.innerHTML = '';
+    monthYear.textContent = `${date.toLocaleString('default', { month: 'long' })} ${year}`;
+
+    for (let i = 0; i < firstDay; i++) {
+      calendarDays.innerHTML += `<div></div>`;
+    }
+
+    for (let day = 1; day <= totalDays; day++) {
+      const dateObj = new Date(year, month, day);
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+      let className = 'no-class';
+
+      if (attendance[dateStr] === 'present') {
+        className = 'present';
+      } else if (attendance[dateStr] === 'absent') {
+        className = 'absent';
+      }
+
+      if (dateObj.getDay() === 0) {
+        className += ' sunday';
+      }
+
+      const isToday = dateObj.toDateString() === today.toDateString();
+      if (isToday) {
+        className += ' today';
+      }
+
+      calendarDays.innerHTML += `<div class="${className}">${day}</div>`;
+    }
+  }
+
+  function prevMonth() {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderCalendar(currentDate);
+  }
+
+  function nextMonth() {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderCalendar(currentDate);
+  }
+
+  window.onload = function () {
+    const userId = {{ user_id|tojson }};  // Flask passes user_id
+    fetch(`/api/attendance/${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        attendance = data;
+        renderCalendar(currentDate);
+      })
+      .catch(error => {
+        console.error("Failed to load attendance:", error);
+      });
+  };
+
+
+// table
+ const userId = {{ current_user.id }}; // or pass it as a variable in render_template
+  let attendanceData = [];
+
+  // Fetch attendance data from the server
+  fetch(`/api/attendance_table/${userId}`)
+    .then(res => res.json())
+    .then(data => {
+      // Reverse the data to show the latest attendance at the top
+      attendanceData = data.reverse();  // Store the data to use for filtering
+      renderTable(attendanceData); // Render the table with all data initially
+    })
+    .catch(error => console.error("Fetch error:", error));
+
+  // Function to render the table
+  function renderTable(data) {
+    const tbody = document.querySelector("#attendanceTable tbody");
+    tbody.innerHTML = '';  // Clear any existing rows
+
+    // Populate the table with data
+    data.forEach(row => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.name}</td>
+        <td>${row.date}</td>
+        <td style="color: ${row.status === 'Present' ? 'green' : 'red'}">${row.status}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // Filter function to show "Present", "Absent", or "All" data
+  function filterAttendance(status) {
+    let filteredData;
+    if (status === 'Present') {
+      filteredData = attendanceData.filter(row => row.status === 'Present');
+    } else if (status === 'Absent') {
+      filteredData = attendanceData.filter(row => row.status === 'Absent');
+    } else {
+      filteredData = attendanceData;  // Show all data
+    }
+
+    // Render the table with filtered data
+    renderTable(filteredData);
+  }
+
+// text details
+    function fetchAttendance() {
+    fetch("/student_attendance")
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          document.querySelector(".attendance_details").innerHTML = `<p>Error: ${data.error}</p>`;
+        } else {
+          document.querySelector(".attendance_details").innerHTML = `
+            <p><strong>Attended Classes:</strong> ${data.attended}</p>
+             <p><strong>Absent Classes:</strong> ${data.total_classes-data.attended}</p>
+            <p><strong>Total Classes:</strong> ${data.total_classes}</p>
+            <p><strong>Attendance Percentage:</strong> ${data.percentage}</p>
+           
+          `;
+
+          updateAttendanceChart(data.attended, data.total_classes);
+        }
+      })
+      .catch(error => console.error("Error fetching attendance:", error));
+}
+
+// Fetch attendance every 10 seconds (real-time update)
+setInterval(fetchAttendance, 10000);
+
+// Fetch immediately on page load
+fetchAttendance();
+
+
+</script>
+
+
+
+
+
+</body>
+</html>

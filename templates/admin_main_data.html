@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student attendance data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .table-container {
+            width: 80%;
+            max-width: 600px;
+            overflow-y: auto;
+            max-height: 200px; /* This ensures only 5 rows are visible */
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #007bff;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tbody tr:hover {
+            background: #f1f1f1;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+    <script>
+        function fetchAdmins() {
+            fetch('/get_logged_in_admins')
+            .then(response => response.json())
+            .then(data => {
+                let tableBody = document.getElementById("admin-table-body");
+                let today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+                let existingUserIds = new Set();
+                
+                // Store existing User IDs in a set
+                Array.from(tableBody.getElementsByTagName("tr")).forEach(row => {
+                    existingUserIds.add(row.cells[0]?.innerText);
+                });
+
+                data.forEach(admin => {
+                    if (admin.date === today) {
+                        // Remove existing row if User ID already exists
+                        if (existingUserIds.has(admin.user_id.toString())) {
+                            let existingRow = Array.from(tableBody.getElementsByTagName("tr")).find(row => row.cells[0]?.innerText === admin.user_id.toString());
+                            if (existingRow) {
+                                existingRow.remove();
+                            }
+                        }
+                        
+                        // Add new row at the top
+                        let row = document.createElement("tr");
+                        row.innerHTML = `<td>${admin.user_id}</td>
+                                         <td>${admin.name}</td>
+                                         <td>${admin.rollno}</td>
+                                         <td>${admin.login_time}</td>
+                                         <td>${admin.date}</td>`;
+                        tableBody.prepend(row); // Add new data at the beginning
+                        existingUserIds.add(admin.user_id.toString());
+                    }
+                });
+            })
+            .catch(error => console.error("Error fetching data:", error));
+        }
+
+        function clearTable() {
+            document.getElementById("admin-table-body").innerHTML = "";
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchAdmins();  
+            setInterval(fetchAdmins, 5000);
+        });
+    </script>
+</head>
+<body>
+    <h2>Student attendance data</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Roll No</th>
+                    <th>Login Time</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="admin-table-body">
+                <!-- Data will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <div class="buttons">
+        <button onclick="fetchAdmins()">Refresh</button>
+        <button onclick="clearTable()">Clear</button>
+    </div>
+</body>
+</html>

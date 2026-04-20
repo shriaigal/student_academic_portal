@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+</head>
+<style>
+  .profile-details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .pd{
+    text-align: left;
+    justify-content: space-between;
+
+  }
+    #chartContainer {
+            width: 400px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 150px;
+        }
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+       #atandpie{
+        font-size: 40px;
+        max-width: auto;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      position: relative;
+      }
+        .atd{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+       }
+#atda{
+  display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+}
+
+       .attendance_details{
+        display: grid;
+        align-items: center;
+        justify-content: center;
+       }
+       h1{
+        text-align: center;
+        font-size: 50px;
+       }
+
+</style>
+<body>
+    <div class="profile-details">
+      <div class="pd">
+        <p><strong>Name:</strong> <span id="user-name"></span></p>
+        <p><strong>Roll No:</strong> <span id="user-rollno"></span></p>
+        <!-- <p><strong>Reg No:</strong> <span id="user-regno"></span></p> -->
+        <p><strong>Class:</strong> <span id="user-class"></span></p>
+        <p><strong>Section:</strong> <span id="user-section"></span></p>
+        <!-- <p><strong>Phone:</strong> <span id="user-phone"></span></p>
+        <p><strong>Gmail:</strong> <span id="user-gmail"></span></p> -->
+    </div>
+      </div>
+    <h1>Student Attendance Details</h3>
+        <div class="atd">
+        
+        <div id="atandpie">
+        <div id="atda"><div class="attendance_details"></div>
+        </div>
+        
+            <div class="attendance_details" style="text-align: center;"></div>
+            <div id="chartContainer">
+                <canvas id="attendanceChart"></canvas> <!-- Pie Chart Canvas -->
+            </div>
+          </div>
+        </div>
+</body>
+<script>  
+
+function fetchUserProfile() {
+    fetch("/profile_data")  // Fetch user profile details
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert("Error: " + data.error);
+        } else {
+          document.getElementById("user-name").innerText = data.name;
+          document.getElementById("user-rollno").innerText = data.rollno;
+          document.getElementById("user-class").innerText = data.class_name;
+          document.getElementById("user-section").innerText = data.section;
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching user profile:", error);
+      });
+  }
+function fetchAttendance() {
+    fetch("/student_attendance")
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          document.querySelector(".attendance_details").innerHTML = `<p>Error: ${data.error}</p>`;
+        } else {
+          document.querySelector(".attendance_details").innerHTML = `
+            <p><strong>Attended Classes:</strong> ${data.attended}</p>
+            <p><strong>Total Classes:</strong> ${data.total_classes}</p>
+            <p><strong>Attendance Percentage:</strong> ${data.percentage}</p>
+          `;
+
+          updateAttendanceChart(data.attended, data.total_classes);
+        }
+      })
+      .catch(error => console.error("Error fetching attendance:", error));
+}
+
+let attendanceChart;
+function updateAttendanceChart(attended, total) {
+    const absent = total - attended;
+    const ctx = document.getElementById("attendanceChart").getContext("2d");
+
+    if (attendanceChart) {
+        attendanceChart.data.datasets[0].data = [attended, absent];
+        attendanceChart.update();
+    } else {
+        attendanceChart = new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: ["Attended", "Absent"],
+                datasets: [{
+                    data: [attended, absent],
+                    backgroundColor: ["#4CAF50", "#FF5733"],
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: { legend: { position: "top" } }
+            }
+        });
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetchAttendance();  
+    setInterval(fetchAttendance, 5000);  // Fetch every 5 seconds
+});
+
+
+   // Fetch user profile data
+   function fetchUserProfile() {
+    fetch("/dash_data")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById("user-name").innerText = data.name;
+        document.getElementById("user-rollno").innerText = data.rollno;
+        document.getElementById("user-class").innerText = data.class_name;
+        document.getElementById("user-section").innerText = data.section;
+
+      })
+      .catch(error => {
+        console.error("Error fetching user data:", error);
+        alert('Failed to load profile data. Please try again later or login your account.');
+      });
+  }
+
+  // Call the function on page load
+  window.onload = fetchUserProfile;
+
+</script>
+</html>

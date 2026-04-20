@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Account</title>
+
+
+<style>
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Background Animation */
+body {
+overflow: auto;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+background: radial-gradient(circle, #1E90FF, #000428);
+}
+
+header {
+text-align: center;
+padding: 20px;
+}
+
+header img {
+border-radius: 50%;
+border: 2px solid black;
+width: 100px;
+height: 100px;
+}
+
+header h1 {
+color: #fff;
+font-size: 2em;
+font-weight: bold;
+}
+/* Canvas for animation */
+#bgCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* 3D Form Container */
+.form-container {
+    text-align: center;
+    top:0vh;
+    background: rgba(22, 10, 67, 0.74);
+    padding: 40px;
+    border-radius: 10px;
+    /* box-shadow: 0px 10px 20px rgba(144, 222, 222, 0.6); */
+    backdrop-filter: blur(2px);
+    /* transform: perspective(800px) rotateX(10deg);
+    transition: transform 0.3s; */
+    position: relative;
+    z-index: 1;
+    width: 600px;
+    height: auto;
+}
+
+/* .form-container:hover {
+    transform: perspective(800px) rotateX(0deg);
+} */
+
+/* Form Styles */
+h2 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+label {
+    color: #fff;
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 250px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    border:1px solid grey;
+    color: #fff;
+}
+input[type="email"]::placeholder
+{
+    color: rgba(255, 255, 255, 0.736);
+}
+input[type="tel"]::placeholder
+{
+    color: rgba(255, 255, 255, 0.736);
+}
+input[type="password"]::placeholder
+{
+    color: rgba(255, 255, 255, 0.736);
+}
+input[type="text"]::placeholder
+{
+    color: rgba(255, 255, 255, 0.736);
+}
+input[type="file"]
+{
+    color:rgba(255, 255, 255, 0.736);
+}
+
+select {
+    width: 250px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    border:1px solid grey;
+    color: rgba(255, 255, 255, 0.736);
+}
+option{
+    background-color: rgba(3, 7, 59, 0.996);
+}
+
+button {
+    width: 250px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    color: cyan;
+    background: none;
+    cursor: pointer;
+    transition: 0.5s;
+    border:1px solid cyan;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+button:hover {
+    background: #00ffff;
+    color:black;
+}
+.check{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 10px;
+    
+}
+.check label{
+    color:rgb(110, 121, 121);
+}
+.check input{
+    position:relative;
+    margin-bottom: 5px;
+    width:15px;
+    margin-right: 5px;
+}
+.input-group-btn{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.check a{
+    text-decoration: none;
+    color:rgb(110, 121, 121);
+}
+p{
+    color: #ffffff;
+}
+p a{
+    color: #ffffff;
+    text-decoration: none;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-container {
+        width: 90%;
+    }
+}
+#drop{
+    color: #ffffff18;
+}
+.alert p {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- <canvas id="bgCanvas"></canvas> -->
+    <div class="form-container">
+        <header>
+            <img src="https://lh3.googleusercontent.com/pw/AP1GczO9Gnycq52VTcW15DUB-0flHLbXFBPhkNlrCvw111TTC5S8vqSVEzKzOK32C949TagfuIy6AWmRrwtHCsgVpmCznwoTQpEmln3cJeCKAPZaD-AXkvqDvDgo3rVkt5uW5YlWUdXf3SwE7Gnyd042aOJu=w913-h913-s-no-gm?authuser=0" alt="Logo">
+            <h2>Student Academic Portal</h2>
+        </header>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <div class="alert" id="flash-message">
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        </div><br>
+    {% endif %}
+{% endwith %}
+        <form action="{{ url_for('create_account') }}" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+                <input type="text" placeholder="Name" name="name" required>
+                <input type="text" placeholder="Roll No" name="rollno" required>
+            </div>
+            <div class="input-group">
+                <input type="text" placeholder="Register No" name="regno" required>
+                <input type="tel" placeholder="Phone Number" pattern="[0-9]{10}" name="phone" required>
+            </div>
+            <div class="input-group">
+            <div class="selection">
+                <select name="class" required>
+                    <option value="" disabled selected hidden id="drop">Choose Your Class</option>
+                    <option value="I BCA">I BCA</option>
+                    <option value="II BCA">II BCA</option>
+                    <option value="III BCA">III BCA</option>
+                </select>
+            </div>
+            <div class="selection">
+                <select name="section" required>
+                    <option value="" disabled selected hidden><p id="drop">Choose Your Section</p></option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                </select>
+            </div>
+        </div>
+            <div class="input-group">
+                <input type="email" placeholder="Email" name="gmail" required>
+                <input type="file" id="image" name="profile_picture" accept="image/*">
+
+            </div>
+
+<div class="input-group">
+    <input type="password" placeholder="Password" name="password" id="password" required>
+    <input type="password" placeholder="Confirm Password" name="confirmpassword" id="confirmpassword" required>
+</div>
+<p id="password-message" style="color: red;"></p>
+
+<script>
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirmpassword");
+    const message = document.getElementById("password-message");
+
+    function validatePassword() {
+        const pass = password.value;
+        const confirmPass = confirmPassword.value;
+
+        const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (!strongPassword.test(pass)) {
+            message.textContent = "Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.";
+            return false;
+        }
+
+        if (pass !== confirmPass) {
+            message.textContent = "Passwords do not match.";
+            return false;
+        }
+
+        message.style.color = "green";
+        message.textContent = "Password is valid and matched!";
+        return true;
+    }
+
+    password.addEventListener("input", validatePassword);
+    confirmPassword.addEventListener("input", validatePassword);
+</script>
+
+
+
+<script>
+// Hide the flash message after 3 seconds
+setTimeout(function() {
+    var flash = document.getElementById('flash-message');
+    if (flash) {
+        flash.style.display = 'none';
+    }
+}, 3000);
+
+setTimeout(function() {
+        var flash = document.getElementById('flash-message');
+        if (flash) {
+            flash.classList.add('fade-out');
+            setTimeout(function() {
+                flash.style.display = 'none';
+            }, 500); // wait for fade-out transition to complete
+        }
+    }, 3000);
+</script>
+
+
+
+
+
+
+
+
+
+<!-- <span class="tooltiptext">Choose your profile picture. It should be in JPEG/PNG format and less than 10MB</span>
+             </div>
+             <small style="color: #555;">Upload your image</small><br> -->
+
+             <div class="check">
+            <input type="checkbox" name="check" id="check" required>
+            <label for="text">By clicking you agree to accept our <b><a href="/terms">terms and condition</a></b>.</label>
+        </div>
+        <div class="input-group-btn">
+            <button type="submit" value="submit" class="btn">Submit</button>
+        </div>
+            <p>Do you have an Account? <a href="/login">Sign in</a></p>
+        </form>
+    </div>
+    <script>
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     const form = document.querySelector("form");
+        //     form.addEventListener("submit", function(event) {
+        //         const password = document.querySelector("input[name='password']").value;
+        //         const confirmPassword = document.querySelector("input[name='confirmpassword']").value;
+    
+        //         if (password !== confirmPassword) {
+        //             alert("Passwords do not match! Please check again.");
+        //             event.preventDefault(); // Prevent form submission
+        //         }
+        //     });
+        // });
+
+
+
+
+         // Canvas setup
+         const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particlesArray = [];
+        const numParticles = 40;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x <= 0 || this.x >= canvas.width) this.speedX *= -1;
+                if (this.y <= 0 || this.y >= canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'cyan';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Initialize Particles
+        function init() {
+            for (let i = 0; i < numParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        // Animate Background
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particlesArray.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particlesArray.length = 0;
+            init();
+        });
+    </script>
+    
+</body>
+</html>

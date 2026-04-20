@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #333;
+    color: #ffcc00;
+    text-transform: uppercase;
+}
+
+td {
+    border-bottom: 1px solid #444;
+}
+
+tr:hover {
+    background-color: #222;
+}
+
+input {
+    background: transparent;
+    color: #fff;
+    border: none;
+    padding: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+input[readonly] {
+    background-color: #1e1e1e;
+    cursor: not-allowed;
+}
+
+button {
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+    border: none;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.ok-btn {
+    background-color: #28a745;
+    color: #fff;
+    display: none;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #ff4d4d;
+}
+
+.action-column {
+    text-align: center;
+}
+
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('/get_users')
+                .then(response => response.json())
+                .then(data => {
+                    let tableBody = document.getElementById("userTableBody");
+                    data.forEach(user => {
+                        let row = `<tr id="row-${user[0]}">
+                            <td>${user[0]}</td> <!-- ID -->
+                            <td><input type="text" value="${user[1]}" id="name-${user[0]}" readonly></td>
+                            <td><input type="text" value="${user[2]}" id="rollno-${user[0]}" readonly></td>
+                            <td><input type="text" value="${user[3]}" id="regno-${user[0]}" readonly></td>
+                            <td><input type="text" value="${user[4]}" id="class-${user[0]}" readonly></td>
+                            <td><input type="text" value="${user[5]}" id="section-${user[0]}" readonly></td>
+                            <td><input type="text" value="${user[6]}" id="phone-${user[0]}" readonly></td>
+                            <td><input type="text" value="${user[7]}" id="gmail-${user[0]}" readonly></td>
+                            <td>
+                                <button onclick="editUser(${user[0]})" id="edit-btn-${user[0]}">Update</button>
+                                <button onclick="updateUser(${user[0]})" id="update-btn-${user[0]}" style="display:none;">OK</button>
+                            </td>
+                            <td><button onclick="deleteUser(${user[0]}, '${user[2]}')" style="color: red;">Delete</button></td>
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error fetching users:', error));
+        });
+
+        function editUser(userId) {
+            document.getElementById(`name-${userId}`).removeAttribute('readonly');
+            document.getElementById(`rollno-${userId}`).removeAttribute('readonly');
+            document.getElementById(`regno-${userId}`).removeAttribute('readonly');
+            document.getElementById(`class-${userId}`).removeAttribute('readonly');
+            document.getElementById(`section-${userId}`).removeAttribute('readonly');
+            document.getElementById(`phone-${userId}`).removeAttribute('readonly');
+            document.getElementById(`gmail-${userId}`).removeAttribute('readonly');
+
+            document.getElementById(`edit-btn-${userId}`).style.display = "none";
+            document.getElementById(`update-btn-${userId}`).style.display = "inline-block";
+        }
+
+        function updateUser(userId) {
+            let name = document.getElementById(`name-${userId}`).value;
+            let rollno = document.getElementById(`rollno-${userId}`).value;
+            let regno = document.getElementById(`regno-${userId}`).value;
+            let className = document.getElementById(`class-${userId}`).value;
+            let section = document.getElementById(`section-${userId}`).value;
+            let phone = document.getElementById(`phone-${userId}`).value;
+            let gmail = document.getElementById(`gmail-${userId}`).value;
+
+            fetch('/update_user', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: userId, name: name, rollno: rollno, regno: regno,
+                    class: className, section: section, phone: phone, gmail: gmail
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+
+                document.getElementById(`name-${userId}`).setAttribute('readonly', true);
+                document.getElementById(`rollno-${userId}`).setAttribute('readonly', true);
+                document.getElementById(`regno-${userId}`).setAttribute('readonly', true);
+                document.getElementById(`class-${userId}`).setAttribute('readonly', true);
+                document.getElementById(`section-${userId}`).setAttribute('readonly', true);
+                document.getElementById(`phone-${userId}`).setAttribute('readonly', true);
+                document.getElementById(`gmail-${userId}`).setAttribute('readonly', true);
+
+                document.getElementById(`edit-btn-${userId}`).style.display = "inline-block";
+                document.getElementById(`update-btn-${userId}`).style.display = "none";
+            })
+            .catch(error => console.error('Error updating user:', error));
+        }
+
+        function deleteUser(userId, userRollNo) {
+            let enteredRollNo = prompt("Enter Roll No. to confirm deletion:");
+            if (enteredRollNo === userRollNo) {
+                fetch('/delete_user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: userId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    document.getElementById(`row-${userId}`).remove();
+                })
+                .catch(error => console.error('Error deleting user:', error));
+            } else {
+                alert("Incorrect Roll No. Deletion Canceled.");
+            }
+        }
+
+        
+
+
+        function filterUsers() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let rows = document.querySelectorAll("#userTableBody tr");
+
+    rows.forEach(row => {
+        let name = row.querySelector("td:nth-child(2) input").value.toLowerCase(); // Name column
+        let rollno = row.querySelector("td:nth-child(3) input").value.toLowerCase(); // Roll No column
+        let regno = row.querySelector("td:nth-child(4) input").value.toLowerCase(); // Reg No column
+        let className = row.querySelector("td:nth-child(5) input").value.toLowerCase(); // Class column
+
+        if (name.includes(input) || rollno.includes(input) || regno.includes(input) || className.includes(input)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+
+
+    </script>
+</head>
+<body>
+    <body>
+        <h2>Manage User Data</h2>
+    
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" onkeyup="filterUsers()" placeholder="Search user..." style="padding: 8px; width: 30%; margin-bottom: 15px; border-radius: 5px; border: 1px solid #444; background-color: #1e1e1e; color: #fff;">
+    
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Roll No</th>
+                    <th>Reg No</th>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Phone</th>
+                    <th>Gmail</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody"></tbody>
+        </table>
+    </body>
+    
+</html>

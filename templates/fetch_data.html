@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Report</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #full{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        .filter-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label, select, button {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            margin: 10px 0;
+            transition: all 0.3s ease-in-out;
+        }
+        option{
+            background:#1e3c72;
+}
+
+        label {
+            background: rgba(255, 255, 255, 0.3);
+            text-align: center;
+            font-weight: bold;
+            border-top-left-radius: 20px;
+            
+        }
+        select, button {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            font-weight: bold;
+            height: 42.2px;
+            border-bottom-right-radius: 20px;
+        }
+        button {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #bf360c, 0 10px 20px rgba(0, 0, 0, 0.4);
+            border-bottom-right-radius: 20px;
+            border-top-left-radius: 20px;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0 #bf360c, 0 15px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #bf360c, 0 6px 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.03s ease-in-out;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            color: black;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        thead {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        tbody tr:hover {
+            background: rgba(97, 19, 19, 0.238);
+            /* transform: scale(1.02); */
+            transition: all 0.3s ease-in-out;
+        }
+        #inlabel{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+<div id="full">
+    <h1>Student Attendance data</h1>
+<div id="filters">
+    <div class="filter-container">
+        <div id="inlabel">
+        <label for="classSelect">Select Class:</label>
+        <select id="classSelect">
+            <option value="">All Classes</option>
+            <option value="I BCA">I BCA</option>
+            <option value="II BCA">II BCA</option>
+            <option value="III BCA">III BCA</option>
+        </select>
+    </div>
+    <div id="inlabel">
+        <label for="sectionSelect">Select Section:</label>
+        <select id="sectionSelect">
+            <option value="">All Sections</option>
+            <option value="A">Section A</option>
+            <option value="B">Section B</option>
+            <option value="C">Section C</option>
+        </select>
+    </div>
+        <button onclick="loadFilteredAttendance()">Submit</button>
+        <button id="export-button">Export to PDF</button>
+    </div>
+</div>
+<div id="tablet">
+    <table id="attendanceTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Class</th>
+                <th>Section</th>
+                <th>Attending Classes</th>
+                <th>Attendance Percentage (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here dynamically -->
+        </tbody>
+    </table>
+</div>
+</div>
+
+<!-- Include jsPDF and autoTable Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    function exportToPDF() {
+        const { jsPDF } = window.jspdf;
+        let doc = new jsPDF();
+
+        // Get selected Class and Section
+        let selectedClass = document.getElementById("classSelect").value || "All Classes";
+        let selectedSection = document.getElementById("sectionSelect").value || "All Sections";
+
+        // Add Title
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+        doc.text("Attendance Report", 14, 15);
+
+        // Add Selected Class & Section
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        doc.text(`Class: ${selectedClass}`, 14, 25);
+        doc.text(`Section: ${selectedSection}`, 14, 32);
+
+        // Extract Table Data
+        let table = document.getElementById("attendanceTable");
+        let data = [];
+        let headers = [];
+
+        // Get Table Headers
+        let headerElements = table.querySelectorAll("thead tr th");
+        headerElements.forEach(header => headers.push(header.innerText));
+
+        // Get Table Rows
+        let rowElements = table.querySelectorAll("tbody tr");
+        rowElements.forEach(row => {
+            let rowData = [];
+            let cells = row.querySelectorAll("td");
+            cells.forEach(cell => rowData.push(cell.innerText));
+            data.push(rowData);
+        });
+
+        // Use autoTable to generate PDF table
+        doc.autoTable({
+            head: [headers],
+            body: data,
+            startY: 40 // Adjust position to avoid overlapping text
+        });
+
+        // Save PDF
+        doc.save(`Attendance_Report_${selectedClass}_${selectedSection}.pdf`);
+    }
+
+    // Attach event listener to button
+    document.getElementById("export-button").addEventListener("click", exportToPDF);
+
+
+
+
+        
+        function loadFilteredAttendance() {
+            let selectedClass = $("#classSelect").val();
+            let selectedSection = $("#sectionSelect").val();
+
+            $.ajax({
+                url: "/attendance_filter",
+                method: "GET",
+                data: {
+                    class: selectedClass,
+                    section: selectedSection
+                },
+                success: function(response) {
+                    let tableBody = $("#attendanceTable tbody");
+                    tableBody.empty();
+                    
+                    if (response.length === 0) {
+                        tableBody.append(`<tr><td colspan="6">No records found</td></tr>`);
+                        return;
+                    }
+
+                    response.forEach(function(student) {
+                        let row = `<tr>
+                            <td>${student.name}</td>
+                            <td>${student.rollno}</td>
+                            <td>${student.class}</td>
+                            <td>${student.section}</td>
+                            <td>${student.attending_classes}</td>
+                            <td>${student.attendance_percentage.toFixed(2)}%</td>
+                        </tr>`;
+                        tableBody.append(row);
+                    });
+                },
+                error: function(error) {
+                    console.error("Error fetching data", error);
+                }
+            });
+        }
+
+        // Load all attendance data on page load
+        $(document).ready(function() {
+            loadFilteredAttendance();
+        });
+    </script>
+
+</body>
+</html>

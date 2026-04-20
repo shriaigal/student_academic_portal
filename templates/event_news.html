@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event and News</title>
+    <style >
+body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .jai{
+        width:1000px;
+        height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+        .calendar, .events {
+      border: 1px solid #e3e2e2;
+      border-radius: 5px;
+      padding: 10px;
+      width: 48%;
+      background-color: #f9f9f9;
+    }
+.event {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    </style>
+</head>
+<body>
+    
+    <div id="container">
+        <div class="jai">
+    <!-- Events Section -->
+<div class="events">
+    <h1 style="text-align: center;">Latest Event</h1>
+    <div id="latest-event">
+        <p><strong>Title:</strong> <span id="event-title">Loading...</span></p>
+        <p><strong>Guest:</strong> <span id="event-guest">Loading...</span></p>
+        <p><strong>Date:</strong> <span id="event-date">Loading...</span></p>
+        <p><strong>Time:</strong> <span id="event-time">Loading...</span></p>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+</body>
+<script>
+function fetchLatestEvent() {
+        fetch('/api/latest_event')  // Calls the Flask API route
+        .then(response => response.json()) // Convert response to JSON
+        .then(data => {
+            if (data.event) {
+                document.getElementById("event-title").textContent = data.event.title;
+                document.getElementById("event-guest").textContent = data.event.guest;
+                document.getElementById("event-date").textContent = data.event.date;
+                document.getElementById("event-time").textContent = data.event.time;
+            } else {
+                document.getElementById("latest-event").innerHTML = "<p>No upcoming events.</p>";
+            }
+        })
+        .catch(error => console.error("Error fetching latest event:", error));
+    }
+
+    // Fetch latest event on page load
+    document.addEventListener("DOMContentLoaded", fetchLatestEvent);
+
+    
+</script>
+</html>

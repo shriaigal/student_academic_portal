@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <meta name="theme-color" content="green"> -->
+  <title>Student Academic Portal</title>
+  <style>
+    /* Loading Screen Styles */
+   /* Loading Screen Styles */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #007BFF;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  text-align: center; /* Center the text horizontally */
+  z-index: 1000;
+}
+
+#loading-video {
+  width: 20vh;
+  height: 20vh;
+  border-radius: 50%;
+  overflow: hidden; /* Ensures video doesn't overflow the container */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#loading-video video {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+
+    /* Hide the content initially */
+    #main-content {
+      display: none;
+    }
+
+ /* Default Styles (Desktop and larger screens) */
+ body {
+      font-family: Arial, sans-serif;
+      background-color:  rgb(13, 47, 84);
+      margin: 0;
+      padding: 0;
+    }
+  
+    header {
+      text-align: center;
+      padding: 20px;
+    }
+  
+    header img {
+      border-radius: 50%;
+      border: 2px solid black;
+      width: 80px;
+      height: 80px;
+    }
+  
+    header h1 {
+      color:#fff;
+      font-size: 2em;
+      font-weight: bold;
+    }
+  
+
+    .navigation {
+  background: rgba(0, 123, 255, 0.2); /* Semi-transparent for glass effect */
+  backdrop-filter: blur(10px); /* Blur effect */
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 12px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0 0 15px 15px; /* Rounded bottom edges */
+}
+
+.navigation button {
+  background: linear-gradient(145deg, #007BFF, #0056b3); /* 3D gradient */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2), 
+              -4px -4px 10px rgba(255, 255, 255, 0.1); /* 3D inset shadow */
+}
+
+.navigation button:hover {
+  background: linear-gradient(145deg, #0056b3, #003d80);
+  transform: translateY(-3px); /* Lifting effect */
+  box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.3), 
+              -6px -6px 15px rgba(255, 255, 255, 0.1);
+}
+
+    .slider {
+      position: relative;
+      width: 90%;
+      height: 300px;
+      max-width: 1200px;
+      overflow: hidden;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  
+    .slides {
+      display: flex;
+      width: 100%; /* Ensures the slider takes the full width of the parent container */
+    }
+
+    .slides img {
+      width: 100%; /* Ensures each image fills the full width of the slider */
+      height: auto;
+    }
+
+    .navigation-slider {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+  
+    .navigation-slider button {
+      background: transparent;
+      /* background-color: rgba(0, 0, 0, 0.5); */
+      /* color: white; */
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 20px;
+    }
+  
+    .navigation-slider button:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+    }
+  
+    .dots {
+      position: absolute;
+      bottom: 15px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .dot {
+      width: 12px;
+      height: 12px;
+      margin: 0 5px;
+      /* background-color: #ccc; */
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+  
+    .dot.active {
+      background-color: #007BFF;
+    }
+  
+    .instructions {
+      background-color: #b0c4de;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 90%;
+      border-radius: 10px;
+      color:#000000;
+      text-decoration: none;
+    }
+  
+    .instructions ul {
+      list-style-type: disc;
+      margin-left: 20px;
+    }
+  
+    .instructions a{
+      color:#000000;
+      text-decoration: none;
+    }
+
+    #Developer {
+      margin-bottom: 20px;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 300px;
+    }
+
+    /* Menu button styling */
+    #menu-button {
+            font-size: 30px;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        /* Menu styling */
+        #menu {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #333;
+            color: rgb(0, 0, 0);
+            border-radius: 5px;
+            display: none; /* Initially hidden */
+            padding: 10px;
+            width: 200px;
+            margin-top: 20px;
+        }
+        
+
+        #menu a {
+          margin-top:10px;
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        #menu a:hover {
+            background-color: #4CAF50;
+        }
+  
+    /* Media Queries for Laptop (up to 1024px width) */
+    @media (max-width: 1024px) {
+      header h1 {
+        font-size: 1.8em;
+      }
+  
+      .navigation {
+        gap: 10px;
+      }
+  
+      .navigation button {
+        font-size: 0.95em;
+        padding: 9px 18px;
+      }
+  
+      .slider {
+        width: 95%;
+        margin: 20px auto;
+      }
+  
+      .dots {
+        bottom: 12px;
+      }
+  
+      .instructions {
+        padding: 18px;
+        margin: 15px auto;
+      }
+  
+      #Developer {
+        width: 250px;
+        font-size: 0.9em;
+      }
+    }
+  
+    /* Media Queries for Tablets (up to 768px width) */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.5em;
+      }
+  
+      .navigation {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+      }
+  
+      .navigation button {
+        font-size: 0.9em;
+        padding: 8px 15px;
+      }
+  
+      .slider {
+        width: 100%;
+      }
+  
+      .dots {
+        bottom: 10px;
+      }
+  
+      .instructions {
+        padding: 15px;
+        margin: 10px;
+      }
+  
+      #Developer {
+        width: 200px;
+        font-size: 0.8em;
+      }
+    }
+  
+    /* Media Queries for Mobile (up to 480px width) */
+    @media (max-width: 480px) {
+      header img {
+        width: 60px;
+        height: 60px;
+      }
+  
+      header h1 {
+        font-size: 1.2em;
+      }
+  
+      .navigation button {
+        padding: 6px 12px;
+        font-size: 0.8em;
+      }
+  
+      .slider {
+        width: 100%;
+        margin: 10px 0;
+      }
+  
+      .navigation-slider button {
+        padding: 8px 15px;
+        font-size: 16px;
+      }
+  
+      .instructions {
+        padding: 10px;
+      }
+  
+      #Developer {
+        width: 180px;
+        font-size: 0.6em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  
+  <!-- Loading Screen -->
+<div id="loading-screen">
+    <div id="loading-video">
+      <video autoplay muted loop>
+        <source src="D:\slider img\loading.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div>Loading...</div>
+  </div>
+
+  <nav class="navigation">
+    <button onclick="window.location.href=''">Home</button>
+    {% if not current_user.is_authenticated %}
+    <button onclick="window.location.href='/login'">Login</button>
+{% endif %}
+
+    <button onclick="window.location.href='/profile'">Profile</button>
+    <button onclick="window.location.href='/dash'">Dashboard</button>
+    <div id="menu-button" onclick="toggleMenu()">≣</div>
+  </nav>
+
+  <header>
+    <img src="https://lh3.googleusercontent.com/pw/AP1GczO9Gnycq52VTcW15DUB-0flHLbXFBPhkNlrCvw111TTC5S8vqSVEzKzOK32C949TagfuIy6AWmRrwtHCsgVpmCznwoTQpEmln3cJeCKAPZaD-AXkvqDvDgo3rVkt5uW5YlWUdXf3SwE7Gnyd042aOJu=w913-h913-s-no-gm?authuser=0" alt="Logo">
+    <h1>Attendance Management System</h1>
+  </header>
+
+  <!-- Navigation Buttons -->
+  
+
+  <!-- Slider Section -->
+  <section class="slider">
+    <div class="slides">
+      <img src="{{ url_for('get_latest_slider', image_number=1) }}" alt="Slide 1"onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/pw/AP1GczPhLcxiF1D5EGFWkaJpdGAO35RkE8Z6eqaIX6AOD7Pj5QoUYpnNwWWt42nHFG1JjU82FOQXIzF7HiCynNW2RfKQ23tElW6iOHOWSwGY9CGbdQz4-Vpa7_JsiLJyHfANXrdVv8LIQoeTbJmp09JPlB8f=w1600-h390-s-no-gm?authuser=0';">
+      <img src="{{ url_for('get_latest_slider', image_number=2) }}" alt="Slide 2"onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/pw/AP1GczObUM4FrnZHmmlbWpEIr1XXaaiWxK4ul8d2mHDt159wnq-HoBsTHCfpwlapDQpdPuj0n7nHalj_E-JWma41UyZYSDeM_fAi5JgacRq0095NOZ1ji3TZRA2aV0iiQYbMOkj-3wOHrGtd6HK6PW9cQXZg=w1600-h391-s-no-gm?authuser=0';">
+      <img src="{{ url_for('get_latest_slider', image_number=3) }}" alt="Slide 3"onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/pw/AP1GczPO81si0XTw6GFumg6EjN3SBY7c7jguj7rrCktIsHXKVh5I4_JTmjuDMVyMGa6XZqxOBCFOFN6EJpuDHoxZ76s2MjdsS7bivnScA9LiSYFblIVRlG1fuHQOSR6rM5TpXbBXZPkF8Vjc_tLN9y12xp-Y=w1600-h392-s-no-gm?authuser=0';">
+    </div>
+    <div class="navigation-slider">
+      <button id="prev">⟨</button>
+      <button id="next">⟩</button>
+    </div>
+    <div class="dots">
+      <div class="dot active" data-index="0"></div>
+      <div class="dot" data-index="1"></div>
+      <div class="dot" data-index="2"></div>
+    </div>
+  </section>
+
+
+  
+
+  <!-- Menu options -->
+  <div id="menu">
+    <a href="/profile">Profile</a>
+    <a href="">Home</a>
+    <a href="/library">Library</a>
+    <a href="#">College Calendar</a>
+    <a href="#">Events and News</a>
+    <a href="#">Charts and Graphs</a>
+    <a href="/add_news_form">news</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </div>
+</div>
+
+
+  <section class="instructions">
+    <h1>Note: </h1>
+    <ul>
+      <li>Instruction 1</li>
+      <li>Instruction 2</li>
+      <li>Instruction 3</li>
+      <!-- <li>It is handled by <a href="/qr_code" id="inst">scanner</a></li>
+      <li>It is handled by <a href="/sliderimg" id="inst">slider</a></li> -->
+      <li>It is handled by <a href="/admin" id="inst">admin</a></li>
+      <li>It is handled by <a href="/login" id="inst">admin with pass</a></li>
+      <li>It is handled by <a href="/faculty" id="inst">add faculty</a></li>
+      <!-- <li>It is handled by <a href="/time_table" id="inst">table</a></li>
+      <li>It is handled by <a href="/admindata" id="inst">admin data</a></li>
+      <li>It is handled by <a href="/attendance_dashboard" id="inst">fetch data</a></li>
+      <li>It is handled by <a href="/total" id="inst">total</a></li>
+      <li>It is handled by <a href="/admin_main" id="inst">admin main</a></li>
+      <li>It is handled by <a href="/student_marks" id="inst">student marks</a></li>
+      <li>It is handled by <a href="/display_marks_by_class_and_section" id="inst">display all student marks</a></li>
+      <li>It is handled by <a href="/late" id="inst">late</a></li>
+      <li>It is handled by <a href="/feedback" id="inst">feedback</a></li>
+      <li>It is handled by <a href="/feedback_list" id="inst">feedback display</a></li>
+      <li>It is handled by <a href="/update_delete" id="inst">update</a></li>
+      <li>It is handled by <a href="/contact" id="inst">contact us</a></li> -->
+      <li><a href="/about">About this software</a>
+      </li>
+    </ul>
+  </section>
+  <!-- <div id="Developer">Developed by: A S Shridatta Aigal</div> -->
+  
+  <script>
+   // Check if the loading screen has already been shown
+    window.addEventListener('load', () => {
+      if (!sessionStorage.getItem('loadingShown')) {
+        // Show the loading screen for the first time
+        setTimeout(() => {
+          document.getElementById('loading-screen').style.display = 'none';
+          document.getElementById('main-content').style.display = 'block';
+        }, 3000); // 3 seconds
+
+        // Mark that the loading screen has been shown
+        sessionStorage.setItem('loadingShown', 'true');
+      } else {
+        // Skip the loading screen on subsequent visits
+        document.getElementById('loading-screen').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+      }
+    });
+
+
+    const slides = document.querySelector('.slides');
+    const images = document.querySelectorAll('.slides img');
+    const dots = document.querySelectorAll('.dot');
+    const prevButton = document.getElementById('prev');
+    const nextButton = document.getElementById('next');
+  
+    let currentIndex = 0;
+    const totalSlides = images.length;
+  
+    // Clone the first and last slides for seamless looping
+    const firstSlideClone = images[0].cloneNode(true);
+    const lastSlideClone = images[totalSlides - 1].cloneNode(true);
+    slides.appendChild(firstSlideClone);
+    slides.insertBefore(lastSlideClone, images[0]);
+  
+    let slideWidth;
+  
+    // Function to calculate slide width and update the slider's position
+    function updateSliderPosition() {
+      slideWidth = images[0].clientWidth; // Calculate the slide width
+      slides.style.transition = 'none'; // Disable transition for setup
+      slides.style.transform = `translateX(-${slideWidth}px)`; // Move to the first actual slide
+    }
+  
+    // Function to update the active dot
+    function updateDots(index) {
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
+  
+    // Function to go to a specific slide
+    function goToSlide(index) {
+      slides.style.transition = 'transform 0.5s ease-in-out'; // Enable smooth transition
+      slides.style.transform = `translateX(-${(index + 1) * slideWidth}px)`; // Move to the slide
+      currentIndex = index;
+      updateDots(currentIndex);
+    }
+  
+    // Function for the next slide
+    function nextSlide() {
+      if (currentIndex < totalSlides - 1) {
+        goToSlide(currentIndex + 1);
+      } else {
+        // Temporarily disable transition and snap to the first slide clone
+        slides.style.transition = 'none';
+        slides.style.transform = `translateX(-${slideWidth}px)`; // Reset to the first slide
+        setTimeout(() => {
+          slides.style.transition = 'transform 0.5s ease-in-out';
+          goToSlide(0); // Go to the first slide
+        }, 20); // Small delay to allow instant snapping
+      }
+    }
+  
+    // Function for the previous slide
+    function prevSlide() {
+      if (currentIndex > 0) {
+        goToSlide(currentIndex - 1);
+      } else {
+        // Temporarily disable transition and snap to the last slide clone
+        slides.style.transition = 'none';
+        slides.style.transform = `translateX(-${totalSlides * slideWidth}px)`; // Go to the last slide clone
+        setTimeout(() => {
+          slides.style.transition = 'transform 0.5s ease-in-out';
+          goToSlide(totalSlides - 1); // Go to the last slide
+        }, 20); // Small delay to allow instant snapping
+      }
+    }
+  
+    // Event listeners for navigation buttons
+    nextButton.addEventListener('click', nextSlide);
+    prevButton.addEventListener('click', prevSlide);
+  
+    // Dot navigation
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        goToSlide(i);
+      });
+    });
+  
+    // Auto-slide every 3 seconds
+    setInterval(nextSlide, 3000);
+  
+    // Handle window resize to ensure slide width remains correct
+    window.addEventListener('resize', () => {
+      updateSliderPosition(); // Recalculate the position and width
+    });
+  
+    // Ensure correct positioning after the page loads
+    window.onload = () => {
+      updateSliderPosition();
+    };
+
+
+
+
+
+   // Toggle the menu visibility
+   function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Close the menu if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('#menu-button') && !event.target.matches('#menu') && !event.target.matches('#menu a')) {
+                const menu = document.getElementById('menu');
+                menu.style.display = 'none';
+            }
+        }
+
+  </script>
+</body>
+</html>

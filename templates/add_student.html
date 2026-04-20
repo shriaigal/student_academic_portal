@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student Marks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        form {
+            width: 500px;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        }
+        input, select {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #2a2a2a;
+            color: white;
+        }
+        button {
+        
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .flash-message {
+            background-color: rgb(255, 77, 0);
+            color: rgb(255, 255, 255);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .aaa{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap:20px;
+        }
+        .inp{
+            display: flex;
+            width:480px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add Student Marks</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-container">
+                {% for category, message in messages %}
+                    <p class="flash-message">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/add_student">
+        <input type="text" name="rollno" placeholder="Enter Roll Number" class="inp" required>
+        <input type="number" name="max_marks" placeholder="Max Marks (Per Subject)" class="inp" required min="1">
+        <select name="exam_type" required>
+            <option value="I Internal">I Internal</option>
+            <option value="II Internal">II Internal</option>
+        </select>
+
+        <div class="aaa">
+        <input type="text" name="subject1" placeholder="Subject 1" required>
+        <input type="number" name="marks1" placeholder="Marks 1" required min="0" max="100">
+        </div>
+
+        <div class="aaa">
+        <input type="text" name="subject2" placeholder="Subject 2" required>
+        <input type="number" name="marks2" placeholder="Marks 2" required min="0" max="100">
+        </div>
+
+        <div class="aaa">
+        <input type="text" name="subject3" placeholder="Subject 3" required>
+        <input type="number" name="marks3" placeholder="Marks 3" required min="0" max="100">
+        </div>
+
+        <button type="submit">Add Marks</button>
+    </form>
+</div>
+
+<script>
+    window.onpageshow = function(event) {
+        if (event.persisted) {
+            location.reload(); // Forces fresh page load when using the back button
+        }
+    };
+</script>
+
+<script>
+    // Auto-hide flash messages after 5 seconds
+    setTimeout(function() {
+        var flashMessages = document.getElementById("flash-container");
+        if (flashMessages) {
+            flashMessages.style.transition = "opacity 0.5s";
+            flashMessages.style.opacity = "0";
+            setTimeout(() => flashMessages.remove(), 500); // Removes from DOM after fade-out
+        }
+    }, 5000);
+</script>
+</body>
+</html>

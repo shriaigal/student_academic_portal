@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Core Features - SAP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      line-height: 1.7;
+    }
+
+    nav {
+      background-color: #1e293b;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    nav a {
+      color: #38bdf8;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: #7dd3fc;
+    }
+
+    section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      border-bottom: 1px solid #334155;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: #38bdf8;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      color: #facc15;
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+    }
+
+    footer {
+      background-color: #1e293b;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+      }
+
+      nav a {
+        margin: 0.5rem 0;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- <nav>
+    <div><strong>SAP</strong></div>
+    <div>
+      <a href="#attendance">Attendance</a>
+      <a href="#marks">Marks</a>
+      <a href="#timetable">Timetable</a>
+      <a href="#calendar">Calendar</a>
+      <a href="#feedback">Feedback</a>
+      <a href="#report">Reports</a>
+    </div>
+  </nav> -->
+
+  <section>
+    <h1>Core Features of SAP</h1>
+  </section>
+
+  <section id="attendance">
+    <h2>1. Student Attendance Management</h2>
+    <p>
+      Faculty can mark attendance daily for each class with a simple and efficient interface. Attendance can be tracked monthly or semester-wise and is visually represented with color codes for easy analysis. Students can view their own attendance status in real-time, which improves transparency and accountability.
+    </p>
+  </section>
+
+  <section id="marks">
+    <h2>2. Student Marks Management</h2>
+    <p>
+      Teachers can enter internal exam scores, assignment marks, and lab evaluations. The system automatically calculates the percentage using predefined formulas. Students can view marks along with charts and comparisons using Chart.js, helping them understand their academic progress clearly.
+    </p>
+  </section>
+
+  <section id="timetable">
+    <h2>3. College Timetable Scheduling</h2>
+    <p>
+      Admins can assign weekly timetables for each class, including subjects, periods, and teacher allocations. Faculty and students have access to personalized timetable views. The system prevents scheduling conflicts and ensures all slots are appropriately filled.
+    </p>
+  </section>
+
+  <section id="calendar">
+    <h2>4. Academic Calendar & Events</h2>
+    <p>
+      A centralized academic calendar displays upcoming events, holidays, exam dates, and other important notifications. Admins can post new events and students can access them through a clean calendar interface. This keeps everyone informed and avoids miscommunication.
+    </p>
+  </section>
+
+  <section id="feedback">
+    <h2>5. Student Feedback System</h2>
+    <p>
+      Students can submit feedback through a dedicated form that sends their message directly to the administrator's email. This creates a healthy communication channel where students can raise concerns, suggest improvements, or report technical issues.
+    </p>
+  </section>
+
+  <section id="report">
+    <h2>6. Report Generation & Export</h2>
+    <p>
+      The system supports automatic PDF generation of marksheets and attendance records using jsPDF. These downloadable reports help students, faculty, and administrators to maintain documentation and share performance records when needed.
+    </p>
+  </section>
+
+  <footer>
+    &copy; 2025 Student Academic Portal | All Rights Reserved
+  </footer>
+
+</body>
+</html>

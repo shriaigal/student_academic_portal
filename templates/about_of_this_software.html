@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About the Software - SAP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1a1a2e;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+
+    nav {
+      background-color: #121230;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    a{
+        color: rgb(255, 255, 255);
+        text-decoration: none;
+    }
+    nav a {
+      color: #00f2ff;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      padding: 60px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h2 {
+      font-size: 2rem;
+      color: #00ffe7;
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+
+    footer {
+      background-color: #121230;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #aaa;
+    }
+
+    footer h3 {
+      color: #00ffe7;
+      margin-bottom: 10px;
+    }
+
+    footer p {
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav a {
+        margin: 0.5rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div><strong>SAP</strong></div>
+    <div>
+      <a href="#intro">Introduction</a>
+      <a href="#features">Features</a>
+      <a href="#tech">Technologies</a>
+      <a href="#objectives">Objectives</a>
+      <a href="#conclusion">Conclusion</a>
+      <a href="#developer">Developer</a>
+    </div>
+  </nav>
+
+  <section id="intro">
+    <h2>Introduction</h2>
+    <p>
+      The Student Academic Portal is a modern web-based application designed to automate and enhance the management of student data, attendance, academic records, and institutional events. It streamlines the workflow of administrators, faculty, and students by offering a centralized platform for real-time academic operations.
+    </p>
+    <p>
+      Sap aims to reduce paperwork, increase data accuracy, and provide an intuitive interface for managing critical institutional activities from class attendance to event scheduling and student performance tracking.
+    </p>
+  </section>
+
+  <section id="features">
+    <h2>Core Features</h2>
+    <p><strong>✔ Attendance Management:</strong> Mark, view, and calculate student attendance with percentage analysis.</p>
+    <p><strong>✔ Marks Management:</strong> Enter, update, and view student marks with automated percentage calculation and graphical reports using Chart.js.</p>
+    <p><strong>✔ Timetable Scheduling:</strong> Create and display weekly academic timetables for classes and faculty.</p>
+    <p><strong>✔ College Events & Calendar:</strong> Maintain academic calendars and post event updates for students and staff.</p>
+    <p><strong>✔ Feedback System:</strong> Students can submit feedback, which is forwarded to admin via email integration.</p>
+    <p><strong>✔ Reports and Export:</strong> Download reports as PDF using jsPDF for documentation and printing. <a href="/feature">more...</a></p>
+  </section>
+
+  <section id="tech">
+    <h2>Technologies Used</h2>
+    <p><strong>Frontend:</strong> HTML, CSS, JavaScript (with Tailwind for UI enhancements)</p>
+    <p><strong>Backend:</strong> Python with Flask framework</p>
+    <p><strong>Database:</strong> SQLite for lightweight, file-based data storage</p>
+    <p><strong>Visualization:</strong> Chart.js for graphs and jsPDF for report generation</p>
+    <p><strong>Integration:</strong> Flask-Login for authentication and SMTP for email feedback</p>
+  </section>
+
+  <section id="objectives">
+    <h2>Design Objectives</h2>
+    <p>🔹 Improve accuracy and efficiency in managing student records and attendance.</p>
+    <p>🔹 Provide role-based access control for secure data operations.</p>
+    <p>🔹 Offer a clean, modern user interface that is responsive across devices.</p>
+    <p>🔹 Enable real-time updates using AJAX and simplify navigation between modules.</p>
+    <p>🔹 Reduce manual paperwork and promote a digital campus environment.</p>
+  </section>
+
+  <section id="conclusion">
+    <h2>Conclusion</h2>
+    <p>
+      The Student Academic Portal is a complete digital solution to traditional academic administration. With powerful features, real-time capabilities, and a user-friendly interface, it helps institutions stay organized, data-driven, and future-ready.
+    </p>
+    <p>
+      This software not only enhances productivity but also supports better communication, academic planning, and student performance monitoring.
+    </p>
+  </section>
+
+  <section id="developer">
+    <h2>Developer Information</h2>
+    <p><strong>Developed by:</strong> A S Shridatta Aigal, Manvith A U, Manthan A U</p>
+    <p><strong>Course:</strong> Bachelor of Computer Applications (BCA)</p>
+    <p><strong>Institution:</strong> Dr B.B Hegde First Grade College Kundapura</p>
+    <p><strong>Project Title:</strong> Student Academic Portal</p>
+  </section>
+
+  <footer>
+    <h3>Contact Information</h3>
+    <p>Email: <a href="mailto:attendancemanagementsystem111@gmail.com" style="color:#00f2ff;">attendancemanagementsystem111@gmail.com</a></p>
+    <p>GitHub: <a href="https://github.com/yourusername" target="_blank" style="color:#00f2ff;">github.com/yourusername</a></p>
+    <p>Phone: +91-1234567890</p>
+    <p>&copy; 2025 Student Academic Portal | All Rights Reserved</p>
+    <a href="/feedback">feedback</a>
+  </footer>
+
+</body>
+</html>

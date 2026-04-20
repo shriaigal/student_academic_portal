@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Report</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Attendance Report (Real-Time)</h2>
+    <p><strong>Total Classes:</strong> <span id="totalClasses"></span></p>
+    
+    <table id="attendanceTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Class</th>
+                <th>Section</th>
+                <th>Attending Classes</th>
+                <th>Attendance Percentage (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        function fetchAttendance() {
+            $.ajax({
+                url: "/get_attendance",
+                method: "GET",
+                success: function(response) {
+                    $("#totalClasses").text(response.total_classes);  // Display total classes
+                    
+                    let tableBody = $("#attendanceTable tbody");
+                    tableBody.empty();
+                    
+                    response.attendance.forEach(function(student) {
+                        let row = `<tr>
+                            <td>${student.name}</td>
+                            <td>${student.rollno}</td>
+                            <td>${student.class}</td>
+                            <td>${student.section}</td>
+                            <td>${student.attending_classes}</td>
+                            <td>${student.attendance_percentage.toFixed(2)}%</td>
+                        </tr>`;
+                        tableBody.append(row);
+                    });
+                },
+                error: function(error) {
+                    console.error("Error fetching data", error);
+                }
+            });
+        }
+
+        // Fetch data immediately on page load
+        fetchAttendance();
+
+        // Fetch data every 1 second to update in real-time
+        setInterval(fetchAttendance, 1000);
+    </script>
+
+</body>
+
+</html>

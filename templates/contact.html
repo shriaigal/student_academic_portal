@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Information</title>
+    <style>
+        body {
+            background-color: #1f2937; /* Tailwind's gray-900 */
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .info-box {
+            background-color: #2d3748; /* Tailwind's gray-800 */
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 32rem;
+            text-align: center;
+        }
+        .info-text {
+            font-size: 1.125rem;
+            margin-top: 0.5rem;
+        }
+        .social-section {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .social-links a {
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .facebook { color: #60a5fa; } /* blue-400 */
+        .facebook:hover { color: #3b82f6; } /* blue-500 */
+        .instagram { color: #f472b6; } /* pink-400 */
+        .instagram:hover { color: #ec4899; } /* pink-500 */
+        .twitter { color: #93c5fd; } /* blue-300 */
+        .twitter:hover { color: #60a5fa; } /* blue-400 */
+        .map-container {
+            margin-top: 1.5rem;
+            width: 100%;
+            max-width: 32rem;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 16rem;
+            border: none;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Information</h1>
+        <div class="info-box">
+            <p class="info-text">📍 Address: Dr B B Hegde First Grade College Kundapura, Kundapura, 576201, India</p>
+            <p class="info-text">📞 Phone: +91 234 567 890</p>
+            <p class="info-text">✉️ Email: attendancemanagmentsystem@gamil.com</p>
+        </div>
+        <div class="social-section">
+            <p>Follow us on:</p>
+            <div class="social-links">
+                <a href="#" class="facebook">Facebook</a>
+                <a href="#" class="instagram">Instagram</a>
+                <a href="#" class="twitter">Twitter</a>
+            </div>
+        </div>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.360208825673!2d74.70031361133836!3d13.635839199911093!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbc8e110a437dd7%3A0x6305dcc6ce0e87ee!2sDr.B%20B%20Hegde%20First%20Grade%20college!5e0!3m2!1sen!2sin!4v1741184139353!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Academic Portal - Events and News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        
+        @media (max-width: 600px) {
+            header {
+                padding: 15px;
+                font-size: 18px;
+            }
+            .container {
+                padding: 15px;
+            }
+            .form-group input, .form-group button {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Attendance Management System</h1>
+    </header>
+    <div class="container">
+        <h2>Slider Images</h2>
+        <form id="slider-form" method="POST" action="{{ url_for('upload_slider') }}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="slider1">Slider 1 Image</label>
+                <input type="file" id="slider1" name="slider1" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="slider2">Slider 2 Image</label>
+                <input type="file" id="slider2" name="slider2" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="slider3">Slider 3 Image</label>
+                <input type="file" id="slider3" name="slider3" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Save</button>
+            </div>
+        </form>
+        
+    </div>
+
+        
+
+    
+    <script src="script.js"></script>
+
+
+
+    <script>
+        function saveSliderImages() {
+            alert("Slider images saved successfully!");
+        }
+
+        function saveEventDetails() {
+            alert("Event details saved successfully!");
+        }
+
+
+        function saveSliderImages() {
+    let slider1 = document.getElementById('slider1').files[0];
+    let slider2 = document.getElementById('slider2').files[0];
+    let slider3 = document.getElementById('slider3').files[0];
+
+    if (!slider1 || !slider2 || !slider3) {
+        alert("Please select all three images before saving.");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append('slider1', slider1);
+    formData.append('slider2', slider2);
+    formData.append('slider3', slider3);
+
+    fetch('/upload_slider', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+    function refreshSliderImages() {
+        document.getElementById("slider1-img").src = "/get_latest_slider/1?" + new Date().getTime();
+        document.getElementById("slider2-img").src = "/get_latest_slider/2?" + new Date().getTime();
+        document.getElementById("slider3-img").src = "/get_latest_slider/3?" + new Date().getTime();
+    }
+
+    // Refresh images every 5 seconds
+    setInterval(refreshSliderImages, 5000);
+
+
+
+    </script>
+</body>
+</html>

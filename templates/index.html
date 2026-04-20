@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Academic Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+/* General Styles */
+         /* Reset margin & padding */
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body should allow scrolling if content is large */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: rgb(255, 255, 255);
+            background: #0a192f; /* Dark blue background */
+            position: relative;
+        }
+
+        /* Fullscreen particle effect */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vw;
+            z-index: -1; /* Push behind content */
+        }
+
+        /* Main content section */
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 50px;
+        }
+
+        /* Extra content for scrolling */
+
+    /* Header */
+    header {
+        background-color:rgb(21, 24, 52) ;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+
+    header h1 {
+        font-size: 24px;
+        letter-spacing: 1px;
+    }
+    .navbar {
+        
+            position: sticky;
+            top: 0;
+            
+            width: 100%;
+            z-index: 1000;
+            background: rgb(49, 54, 60);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-nav .nav-link {
+            color: rgb(255, 255, 255);
+            margin-right: 60px;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -5px;
+            width: 0;
+            height: 2px;
+            background-color: #0d6efd;
+            transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #0d6efd;
+        }
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        .container h3{
+            color: rgb(255, 255, 255);
+        }
+
+
+    /* Buttons */
+    .buttons {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    button {
+        padding: 12px 18px;
+        border: none;
+        background: #007bff;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background: #0056b3;
+    }
+
+    /* Footer */
+    footer {
+        text-align: center;
+        padding: 15px;
+        background: rgb(63, 61, 61);
+        color: white;
+        font-size: 14px;
+
+    }
+    h1 {
+    font-family: "OCR A Extended", monospace;
+    font-size: 2rem;
+    text-transform: uppercase;
+}
+
+        h1 {
+            font-family: 'Audiowide', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+.card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 50px 0;
+        }
+        .card {
+            
+            width: 300px;
+            height: 350px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            position: relative;
+            margin: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.7);
+            margin-bottom: 100px;
+            justify-content: space-around;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            margin-top:-50px;
+            width: 100%;
+            height: 92.5%;
+            object-fit: cover;
+        }
+
+        #outer_card{
+            display: flex;
+        }
+        .image_des{
+        position: absolute;
+            bottom: 0;
+            background: rgba(54, 92, 129, 0.7);
+            color: rgb(252, 252, 252);
+            font-weight: 700;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+
+    }
+
+
+    .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 100px 20px;
+        }
+        .hero-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            
+            margin: auto;
+        }
+
+        .hero-content {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            width: 1400px;
+            overflow: hidden;
+            height: max-content; /* Initially show only part of the content */
+            transition: height 0.5s ease-in-out;
+            
+        }
+
+        
+        .hero-content p{
+            text-align: justify;
+            margin-left: 50px;
+            font-size: 17px;
+        }
+
+
+        .hero-image {
+            position: relative;
+            max-width: 100%;
+
+        }
+        .hero-image img {
+            width: 500px;
+            height: auto;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.5);
+            /* transform: rotateY(-10deg) rotateX(5deg); */
+            transition: transform 0.5s ease-in-out;
+        }
+        /* .hero-image img:hover {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.05);
+        } */
+        .hero-buttons .btn {
+            margin: 10px;
+        }
+
+
+        #main{
+            margin-top: 50px;
+        display: flex;
+            align-items: center;
+            flex-direction: row;  
+            margin-bottom: 50px;
+    }
+
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 50px 0;
+        }
+
+
+
+.title{
+    display: flex;
+    margin-left: 200px;
+    
+
+}
+.subtitle{
+    margin-top:50px;
+    display: flex;
+    text-align: left;
+
+}
+.subtitle h1{ 
+margin-left: 20px;
+margin-top: 40px;
+
+}
+.subtitle img{
+    border: 2px solid rgb(255, 255, 255);
+    width:120px;
+    height:120px;
+    border-radius: 50%;
+}
+/* .full_main{
+    position: absolute;
+    
+} */
+
+        
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <nav class="navbar navbar-expand-lg ">
+        <div class="container">
+            <h3>SMS</h3>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- <li class="nav-item"><a class="nav-link" href="#">Home</a></li> -->
+                    <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="btn btn-primary" href="/homepage">Get Started</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="full_main">
+    <div class="title">
+        <div class="subtitle">
+            <img src="https://lh3.googleusercontent.com/pw/AP1GczO9Gnycq52VTcW15DUB-0flHLbXFBPhkNlrCvw111TTC5S8vqSVEzKzOK32C949TagfuIy6AWmRrwtHCsgVpmCznwoTQpEmln3cJeCKAPZaD-AXkvqDvDgo3rVkt5uW5YlWUdXf3SwE7Gnyd042aOJu=w913-h913-s-no-gm?authuser=0" alt="Logo">
+    
+            <h1>Student Academic Portal</h1>
+            
+        </div>
+        
+        </div>
+
+    <div id="main">
+        
+
+        <div class="hero-container">
+            <div class="hero-content" id="heroContent">
+                <div class="hero-image">
+                    <img src="/static\images\index_image.png" alt="Attendance Management System">
+                </div>
+     <p>A Student Management System (SMS) is a web-based application designed to efficiently manage student data, attendance, marks, and feedback. 
+        The system will have three user roles: Admin, Teacher, and Student, each with different levels of access and functionalities.
+
+        The authentication system will use Flask-Login, ensuring secure user login and role-based access. 
+        Admins can add, edit, and delete student records, update and manage attendance, and view reports. 
+        Teachers can update student marks, while Students can only view their marks, attendance, and personal details.
+        
+        The attendance module will allow teachers to mark daily attendance and generate reports. 
+        The marks management system will allow teachers to enter, edit, and update student exam scores, which will be displayed using Chart for graphical representation. 
+        Students can also download their marks in PDF format. 
+        A timetable and academic calendar feature will help students keep track of their schedules. 
+        Additionally, a feedback system will be integrated where students can submit their feedback, which will be store in a database. 
+        The project structure will include separate modules for authentication, student management, attendance, and marks. 
+        The database schema will be designed to handle student profiles, attendance logs, and exam scores efficiently.</p> 
+    </div>
+</div>  
+</div>
+
+
+
+
+</div>
+
+
+<!-- <section class="card-container">
+    <a href="/qr_code">
+    <div id="outer_card">
+        <div class="card">
+            <img src="static\images\QR_code_scanner.jpeg" alt="Feature 4">
+            <div class="image_des">Scanner</div>
+        </div>
+    </div>
+</a>
+</section> -->
+
+
+
+<footer>
+    © 2025 Attendance Management System
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+
+
+<script>
+    particlesJS("particles-js", {
+        particles: {
+            number: { value: 100, density: { enable: true, value_area: 1000 } },
+            color: { value: "#00bfff" }, /* Neon Blue */
+            shape: { type: "circle" },
+            opacity: { value: 0.5 },
+            size: { value: 3, random: true },
+            line_linked: {
+                enable: true,
+                distance: 150,
+                color: "#00bfff",
+                opacity: 0.4,
+                width: 1
+            },
+            move: {
+                enable: true,
+                speed: 2,
+                direction: "none",
+                out_mode: "out",
+            }
+        },
+        interactivity: {
+            detect_on: "canvas",
+            events: {
+                onhover: { enable: true, mode: "grab" },
+                onclick: { enable: true, mode: "push" }
+            },
+            modes: {
+                grab: { 
+                    distance: 250,  /* Increased distance for stronger effect */
+                    line_linked: { opacity: 1 } /* Full opacity on hover */
+                },
+                push: { particles_nb: 4 }
+            }
+        },
+        retina_detect: true
+    });
+
+    // Resize particles container dynamically to match scrolling page height
+    function adjustParticles() {
+        document.getElementById("particles-js").style.height = `${document.body.scrollHeight}px`;
+    }
+
+    window.onload = adjustParticles;
+    window.onresize = adjustParticles;
+</script>
+</div></div>
+</body>
+</html>

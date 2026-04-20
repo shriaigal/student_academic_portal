@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Marks</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #222;
+            color: white;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #444;
+            text-align: center;
+        }
+        th {
+            background: #333;
+        }
+        #error-message {
+            color: red;
+        }
+        canvas {
+            margin-top: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border: none;
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        #outer_chart{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #chart{
+
+            width:800px;
+            height: 450px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>My Marks</h2>
+    <p id="error-message"></p>
+
+    <div id="marks-container"></div>
+<div id="outer_chart">
+<div id="chart">
+    <canvas id="marksChart" width="400" height="200"></canvas>
+</div>
+</div>
+    <button onclick="downloadPDF()">Download as PDF</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/get_student_marks')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById("error-message").textContent = data.error;
+                    return;
+                }
+
+                let container = document.getElementById("marks-container");
+                let html = `<h3>${data.name} (${data.rollno})</h3>
+                            <table id="marksTable">
+                                <tr>
+                                    <th>Exam Type</th>
+                                    <th>Subject 1</th>
+                                    <th>Marks 1</th>
+                                    <th>Subject 2</th>
+                                    <th>Marks 2</th>
+                                    <th>Subject 3</th>
+                                    <th>Marks 3</th>
+                                    <th>Total</th>
+                                    <th>Percentage</th>
+                                </tr>`;
+
+                let labels = [];
+                let marksData = [];
+
+                data.marks.forEach(mark => {
+                    labels.push(mark.exam_type);
+                    let totalMarks = mark.marks1 + mark.marks2 + mark.marks3;
+                    marksData.push(totalMarks);
+
+                    html += `<tr>
+                                <td>${mark.exam_type}</td>
+                                <td>${mark.subject1}</td>
+                                <td>${mark.marks1}</td>
+                                <td>${mark.subject2}</td>
+                                <td>${mark.marks2}</td>
+                                <td>${mark.subject3}</td>
+                                <td>${mark.marks3}</td>
+                                <td>${mark.total_marks}</td>
+                                <td>${mark.percentage.toFixed(2)}%</td>
+                            </tr>`;
+                });
+
+                html += "</table>";
+                container.innerHTML = html;
+
+                // Create Chart.js graph
+                const ctx = document.getElementById('marksChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Marks',
+                            data: marksData,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching marks:", error);
+                document.getElementById("error-message").textContent = "An error occurred. Please try again.";
+            });
+        });
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.text("Student Marks Report", 10, 10);
+            doc.text("Name: " + document.querySelector("h3").innerText, 10, 20);
+            
+            // Convert table to PDF
+            const table = document.getElementById("marksTable");
+            let rows = [];
+            
+            for (let i = 0; i < table.rows.length; i++) {
+                let row = [];
+                for (let j = 0; j < table.rows[i].cells.length; j++) {
+                    row.push(table.rows[i].cells[j].innerText);
+                }
+                rows.push(row);
+            }
+
+            doc.autoTable({
+                head: [rows[0]],
+                body: rows.slice(1),
+                startY: 30
+            });
+
+            doc.save("Student_Marks.pdf");
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
+
+</body>
+</html>

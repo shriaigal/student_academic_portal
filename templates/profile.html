@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student profile</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+/* General Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle,   #254b72, #000428) ;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  position: relative;
+}
+
+/* Neon Background */
+.neon-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.square {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border: 2px solid;
+  border-radius: 15px;
+  opacity: 0.6;
+  animation: floatAnimation 6s infinite linear;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+@keyframes floatAnimation {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(20deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+/* Glassmorphism Effect */
+.glass {
+  background: rgba(61, 54, 96, 0.1);
+  border-radius: 12px;
+  padding: 30px;
+  backdrop-filter: blur(2px);
+  box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Header */
+.header {
+  z-index: 999;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.header img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+}
+
+/* Profile Container */
+.profile-container {
+  width: 60%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  position: relative;
+  height: max-content;
+}
+
+/* .profile-container:hover {
+  transform: translateY(-5px);
+} */
+
+/* Profile Image */
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 10%;
+  border: 2px solid #ffffff;
+  display: block;
+  margin: 10px auto;
+  background: #444;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.profile-img:hover {
+  opacity: 0.8;
+}
+
+/* Edit Icon */
+.edit-icon {
+  position: absolute;
+  top:75%;
+  right: -8px;
+  transform: rotate(270deg);
+  background: #ff9800;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.edit-icon:hover {
+  background: #e68900;
+}
+
+/* Info Box */
+.info-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: justify;
+  flex-wrap: wrap;
+}
+
+.info-text p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #fff;
+}
+
+.info-text strong {
+  color: #ff9800;
+}
+
+/* QR Code Box */
+.qr-box {
+  background: rgb(255, 255, 255);
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.qr-box:hover {
+  transform: scale(1.04);
+}
+.logout-button a{
+    width: 150px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    color: cyan;
+    background: none;
+    cursor: pointer;
+    transition: 0.5s;
+    border:1px solid cyan;
+    font-weight: 600;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+.logout-button a:hover{
+  background: #00ffff;
+  color: #000428;
+}
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .header {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: small;
+}
+  .profile-container {
+    margin-right: 10px;
+    width: 80%;
+    padding: 20px;
+  }
+  
+  .info-box {
+    flex-direction: column;
+    text-align: center;
+    text-align: left;
+  }
+}
+.full-body{
+  justify-content: center;
+  align-items: center;
+width:150vh;
+  display: flex; 
+  flex-direction: column;
+}
+
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+  .profile-container {
+    width: 100%;
+    padding: 20px;
+    height: 700px;
+  }
+  .info-box {
+    flex-direction: column;
+    text-align: center;
+  }
+  .edit-icon {
+    top: 70%;
+    right: -5px;
+    font-size: 10px;
+  }
+  .logout-button a {
+    margin-top: 20px;
+    font-size: 14px;
+    padding: 8px;
+  }
+  .info-text p {
+    font-size: 14px;
+    text-align: left;
+  }
+  .qr-box {
+    margin-top: 20px;
+    height: max-content;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .profile-container {
+    width: 100%;
+    padding: 15px;
+    height: 600px;
+  }
+  .info-text p {
+    font-size: 14px;
+    text-align: left;
+  }
+  .qr-box {
+    margin-top: 20px;
+    height: max-content;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .full-body{
+    margin-top: 100px;
+  }
+  .header h1 {
+    font-size: 18px;
+  }
+  .profile-img {
+    width: 80px;
+    height: 80px;
+  }
+  .edit-icon {
+    top: 70%;
+    right: -5px;
+    font-size: 10px;
+  }
+  .logout-button a {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="neon-background"></div>
+  <div class="full-body">
+  <div class="header">
+    <!-- <img src="https://lh3.googleusercontent.com/pw/AP1GczO9Gnycq52VTcW15DUB-0flHLbXFBPhkNlrCvw111TTC5S8vqSVEzKzOK32C949TagfuIy6AWmRrwtHCsgVpmCznwoTQpEmln3cJeCKAPZaD-AXkvqDvDgo3rVkt5uW5YlWUdXf3SwE7Gnyd042aOJu=w913-h913-s-no-gm?authuser=0" alt="Logo"> -->
+    <h1>Student Academic Portal</h1>
+  </div>
+
+  <div class="profile-container glass">
+
+
+    <div id="iconbutton" style="position: relative; display: inline-block;">
+        <img id="profile-img" src="{{ url_for('profile_picture', user_id=current_user.id) }}" 
+             onerror="this.onerror=null; this.src='https://www.pngmart.com/files/23/Profile-PNG-Photo.png';" 
+             alt="Profile Image" class="profile-img">
+        <label for="fileInput" class="edit-icon">
+            <i class="fas fa-pen"></i>
+        </label>
+        <input type="file" id="fileInput" style="display: none;" accept="image/*">
+    </div>
+
+    <div class="info-box">
+      <div class="info-text">
+        <p><strong>ID:</strong> <span id="user-id"></span></p>
+        <p><strong>Name:</strong> <span id="user-name"></span></p>
+        <p><strong>Roll No:</strong> <span id="user-rollno"></span></p>
+        <p><strong>Reg No:</strong> <span id="user-regno"></span></p>
+        <p><strong>Class:</strong> <span id="user-class"></span></p>
+        <p><strong>Section:</strong> <span id="user-section"></span></p>
+        <p><strong>Phone:</strong> <span id="user-phone"></span></p>
+        <p><strong>Gmail:</strong> <span id="user-gmail"></span></p>
+        <div class="logout-button">
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+      <div class="qr-box glass" id="qr-container">
+        <div id="qrcode"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const colors = ["#ff007f", "#00ccff", "#ffcc00", "#ff6600"];
+  const bgContainer = document.querySelector(".neon-background");
+
+  for (let i = 0; i < 25; i++) {
+    let square = document.createElement("div");
+    square.classList.add("square");
+    square.style.borderColor = colors[Math.floor(Math.random() * colors.length)];
+    square.style.left = `${Math.random() * 100}%`;
+    square.style.top = `${Math.random() * 100}%`;
+    square.style.animationDuration = `${Math.random() * 3 + 3}s`; 
+    bgContainer.appendChild(square);
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function fetchUserProfile() {
+      fetch("/get_qr_data")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json();
+        })
+        .then(data => {
+          document.getElementById("user-id").innerText = data.id;
+          document.getElementById("user-name").innerText = data.name;
+          document.getElementById("user-rollno").innerText = data.rollno;
+          document.getElementById("user-regno").innerText = data.regno;
+          document.getElementById("user-class").innerText = data.class_name;
+          document.getElementById("user-section").innerText = data.section;
+          document.getElementById("user-phone").innerText = data.phone; // Corrected line
+          document.getElementById("user-gmail").innerText = data.gmail; // Corrected line
+
+
+          let qrDataa = `
+id: ${data.id}
+Name: ${data.name}
+Roll No: ${data.rollno}
+Reg No: ${data.regno}
+Class: ${data.class_name} 
+Section: ${data.section}
+Phone: ${data.phone}
+Gmail: ${data.gmail}`;
+          
+          let qrData = `id: ${data.id}, Name: ${data.name}, Roll No: ${data.rollno}, Reg No: ${data.regno}, Class: ${data.class_name}, Section: ${data.section}, Phone: ${data.phone}, Gmail: ${data.gmail}`;
+          let qrContainer = document.getElementById("qrcode");
+          new QRCode(qrContainer, {
+            text: qrData,
+            width: 150,
+            height: 150
+          });
+
+          // Wait for QR code to render before adding click event
+          setTimeout(() => {
+            document.getElementById("qr-container").addEventListener("click", function() {
+              downloadQRCodeAsPDF(qrDataa);
+            });
+          }, 500);
+        })
+        .catch(error => {
+          console.error("Error fetching user data:", error);
+          alert('Failed to load profile data. Please try again later or login your account.');
+        });
+    }
+
+    function downloadQRCodeAsPDF(qrData) {
+      const { jsPDF } = window.jspdf;
+      let pdf = new jsPDF();
+
+      let qrElement = document.querySelector("#qrcode img");
+
+      if (qrElement) {
+        let qrImage = qrElement.src;
+        pdf.setFontSize(16);
+        pdf.text("Attendance QR Code", 70, 20);
+        pdf.addImage(qrImage, "PNG", 50, 30, 100, 100);
+        pdf.setFontSize(12);
+        pdf.text(qrData, 20, 140);
+        pdf.save("QR_Code.pdf");
+      } else {
+        alert("QR Code not generated yet!");
+      }
+    }
+    window.onload = fetchUserProfile;
+
+//image upload
+document.getElementById("fileInput").addEventListener("change", function(event) {
+    let file = event.target.files[0];
+    if (file) {
+        let formData = new FormData();
+        formData.append("profile_picture", file);
+        
+        fetch("/upload_profile_picture", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the profile image with the new one
+                document.getElementById("profile-img").src = data.image_url + "?t=" + new Date().getTime();
+                
+                // Show success alert
+                alert(data.message);
+            } else {
+                alert("Failed to upload image: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred while uploading the image.");
+        });
+    }
+});
+
+</script>
+</body>
+</html>

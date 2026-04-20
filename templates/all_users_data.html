@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users List</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchUsers();
+
+            document.getElementById("searchInput").addEventListener("keyup", function () {
+                let searchValue = this.value.toLowerCase();
+                let rows = document.querySelectorAll("#userTableBody tr");
+
+                rows.forEach(row => {
+                    let rowText = row.innerText.toLowerCase();
+                    row.style.display = rowText.includes(searchValue) ? "" : "none";
+                });
+            });
+        });
+
+        function fetchUsers() {
+            fetch('/users')
+                .then(response => response.json())
+                .then(data => {
+                    let tableBody = document.getElementById("userTableBody");
+                    tableBody.innerHTML = "";
+
+                    data.forEach(user => {
+                        let row = `<tr>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.rollno}</td>
+                            <td>${user.regno}</td>
+                            <td>${user.class}</td>
+                            <td>${user.section}</td>
+                            <td>${user.phone}</td>
+                            <td>${user.gmail}</td>
+                            <td>${user.password}</td> <!-- Show password -->
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #121212; color: #fff; text-align: center; }
+        input { padding: 8px; margin-top: 10px; width: 30%; border-radius: 5px; border: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #1e1e1e; }
+        th, td { padding: 10px; border: 1px solid #444; text-align: left; }
+        th { background-color: #333; }
+    </style>
+</head>
+<body>
+    <h2>Users List</h2>
+    <input type="text" id="searchInput" placeholder="Search Users...">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Reg No</th>
+                <th>Class</th>
+                <th>Section</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Password</th> <!-- Added Password Column -->
+            </tr>
+        </thead>
+        <tbody id="userTableBody"></tbody>
+    </table>
+</body>
+</html>

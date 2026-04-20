@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d3d3d3;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .hidden {
+            display: none;
+        }
+        /* General Container Styling */
+.container {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 420px;
+    width: 100%;
+}
+
+/* QR Scanner Box */
+.camera-box {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+}
+
+video {
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+/* QR Code Result */
+#qrResult {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Input Fields (Now directly inside .container) */
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #fff;
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Submit Button */
+button {
+    width:100%;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+#submitBtn{
+    width:110%;
+}
+button:hover {
+    background: #0056b3;
+}
+
+/* Success Message */
+#successMessage {
+    background: #28a745;
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-top: 15px;
+    text-align: center;
+    display: none;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    video {
+        border-radius: 8px;
+    }
+
+    input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    video {
+        border-radius: 6px;
+    }
+
+    input {
+        font-size: 13px;
+        padding: 7px;
+    }
+
+    button {
+        /* padding: 8px; */
+        font-size: 13px;
+    }
+
+    #qrResult {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <audio id="successSound">
+        <source src="static\images\data save successfull.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="errorSound">
+        <source src="static\images\unsuccessful beep.mp3" type="audio/mpeg">
+    </audio>
+    
+    <div class="container">
+        <h1>QR Code Scanner</h1>
+        <div class="camera-box">
+            <video id="video" autoplay></video>
+        </div>
+        <canvas id="canvas" width="300" height="200" class="hidden"></canvas>
+        <div id="qrResult">Scan a QR Code</div>
+        
+        <form id="qrForm">
+            <div id="inputFields" class="hidden">
+                <label for="id">ID:</label>
+                <input type="text" id="id" readonly>
+
+                <label for="name">Name:</label>
+                <input type="text" id="name" readonly>
+                
+                <label for="rollNo">Roll No:</label>
+                <input type="text" id="rollNo" readonly>
+                
+                <label for="regNo">Reg No:</label>
+                <input type="text" id="regNo" readonly>
+                
+                <label for="class">Class:</label>
+                <input type="text" id="class" readonly>
+                
+                <label for="section">Section:</label>
+                <input type="text" id="section" readonly>
+                
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" readonly>
+                
+                <label for="email">Gmail:</label>
+                <input type="text" id="email" readonly>
+
+                <label for="time">Login Time:</label>
+                <input type="text" id="time" readonly>
+        
+                <label for="date">Date:</label>
+                <input type="text" id="date" readonly>
+                
+                <button id="submitBtn">Submit</button>
+            </div>
+        </form>
+
+        <div id="successMessage" class="hidden">QR Data Stored Successfully!</div>
+        <!-- <button id="addNextBtn" class="hidden">Scan Next QR Code</button> -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+    
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const qrResult = document.getElementById('qrResult');
+        const inputFields = document.getElementById('inputFields');
+        const successMessage = document.getElementById('successMessage');
+        const addNextBtn = document.getElementById('addNextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+
+        let lastScannedQR = null;
+        let scanning = true;
+
+        // Access the webcam
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(stream => {
+                video.srcObject = stream;
+                video.play();
+                requestAnimationFrame(scanQRCode);
+            })
+            .catch(err => {
+                console.error("Error accessing webcam:", err);
+                qrResult.textContent = "Error accessing webcam.";
+                document.getElementById("errorSound").play();
+            });
+
+            function scanQRCode() {
+    if (video.readyState === video.HAVE_ENOUGH_DATA && scanning) {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
+        
+        if (qrCode && qrCode.data !== lastScannedQR) {
+            lastScannedQR = qrCode.data;
+            scanning = false;
+
+            try {
+                const qrDataArray = qrCode.data.split(", ");
+                let qrDataObj = {};
+                qrDataArray.forEach(pair => {
+                    let [key, value] = pair.split(": ");
+                    if (key && value) {
+                        qrDataObj[key.trim()] = value.trim();
+                    }
+                });
+
+                // Check if required fields exist (assuming 'id' and 'Name' must be present)
+                if (!qrDataObj["id"] || !qrDataObj["Name"]) {
+                    document.getElementById("errorSound").play(); // Play error sound
+                    alert("Invalid QR Code!");
+                    scanning = true; // Allow rescan immediately
+                    return;
+                }
+
+                // Fill the form with QR data
+                document.getElementById("id").value = qrDataObj["id"] || "";
+                document.getElementById("name").value = qrDataObj["Name"] || "";
+                document.getElementById("rollNo").value = qrDataObj["Roll No"] || "";
+                document.getElementById("regNo").value = qrDataObj["Reg No"] || "";
+                document.getElementById("class").value = qrDataObj["Class"] || "";
+                document.getElementById("section").value = qrDataObj["Section"] || "";
+                document.getElementById("phone").value = qrDataObj["Phone"] || "";
+                document.getElementById("email").value = qrDataObj["Gmail"] || "";
+
+                setCurrentDateTime();
+                inputFields.classList.remove("hidden");
+
+                // 🚀 Scroll to the bottom smoothly
+                window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+
+            } catch (e) {
+                console.error("Error parsing QR data:", e);
+                document.getElementById("errorSound").play(); // Play error sound
+                alert("Error reading QR Code!");
+            }
+
+            // Restart scanning after 5 seconds
+            setTimeout(() => {
+                resetScanner();
+            }, 5000);
+        }
+    }
+    requestAnimationFrame(scanQRCode);
+}
+
+
+
+
+function resetScanner() {
+    document.getElementById("qrForm").reset();
+    inputFields.classList.add("hidden");
+    lastScannedQR = null;
+    scanning = true;
+}
+
+        function setCurrentDateTime() {
+            const now = new Date();
+            const options = { timeZone: "Asia/Kolkata", hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" };
+            const currentTime = now.toLocaleTimeString("en-IN", options);
+            const currentDate = now.toISOString().split("T")[0];
+
+            document.getElementById("time").value = currentTime;
+            document.getElementById("date").value = currentDate;
+        }
+
+        document.getElementById("qrForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const formData = {
+        id: document.getElementById("id").value,
+        name: document.getElementById("name").value,
+        rollNo: document.getElementById("rollNo").value,
+        regNo: document.getElementById("regNo").value,
+        class: document.getElementById("class").value,
+        section: document.getElementById("section").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value,
+        loginTime: document.getElementById("time").value,
+        date: document.getElementById("date").value
+    };
+
+    fetch("/store_qr_data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById("successSound").play(); // Play success sound
+            successMessage.classList.remove("hidden");
+            alert("QR Data Stored Successfully!");
+            window.location.reload();
+        } else {
+            document.getElementById("errorSound").play(); // Play error sound
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        document.getElementById("errorSound").play(); // Play error sound
+        alert("An error occurred while submitting the data.");
+    });
+});
+
+    </script>
+
+<!-- <script>
+    // Define your password
+    const password = "sams@123"; // Replace with your password
+
+    // Password prompt on page load
+    function askPassword() {
+        const userPassword = prompt("Enter password to access the scanner:");
+        if (userPassword !== password) {
+            alert("Incorrect password!");
+            window.location.href = "about:blank"; // Redirect to a blank page if password is wrong
+        }
+    }
+
+    // Ask password when closing the page
+    window.onbeforeunload = function() {
+        const userPassword = prompt("Enter password to leave the page:");
+        if (userPassword !== password) {
+            return "You need to enter the correct password to leave this page."; // Custom message before leaving
+        }
+    };
+
+    // Call the askPassword function on page load
+    window.onload = function() {
+        askPassword();
+    };
+</script> -->
+
+
+</body>
+</html>

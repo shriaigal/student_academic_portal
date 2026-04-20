@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+  <style>
+
+body {
+    background: radial-gradient(circle,   #254b72, #000428) ;
+    color: white;
+}
+
+    .profile {
+      
+      box-shadow: 0px 4px 10px rgba(52, 50, 50, 0.851);
+      flex-wrap: wrap;
+      font-size: 20px;
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      background:transparent;
+      backdrop-filter: blur(2px);
+      position: relative;
+    }
+    .profile img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      margin-right: 15px;
+    }
+    .profile-details {
+      
+      display: flex;
+      flex-direction: column;
+    }
+    .profile-details p {
+      margin: 5px 0;
+    }
+    .menu-button {        
+      position: absolute;
+      top: -10px;
+      right: 10px;
+      background-color: transparent;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .menu-button:hover {
+      color: #007BFF;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 40px;
+      right: 10px;
+      background-color:rgba(18, 32, 75, 0.495);
+      backdrop-filter: blur(10px);
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 15px;
+      text-decoration: none;
+      color: #ffffff;
+      z-index: 999;
+    }
+    .dropdown-menu a:last-child {
+      border-bottom: none;
+    }
+    .dropdown-menu a:hover {
+      background-color: #1c346b9f;
+    }
+    .container {
+      
+      display: flex;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: auto;
+      margin-top: 70px;
+    }
+    .calendar, .events {
+      border: 1px solid #e3e2e2;
+      border-radius: 5px;
+      padding: 10px;
+      width: 48%;
+      background-color: transparent;
+    }
+    .calendar table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .calendar th {
+      /* border: 1px solid white; */
+      background-color: transparent;
+      padding: 5px;
+      text-align: center;
+    }
+    .calendar td {
+      padding: 5px;
+      text-align: center;
+    }
+    .calendar td:hover {
+      opacity: 1;
+      background-color: #6bbb7366;
+      border-radius: 5px;
+    }
+    .day-header {
+      font-weight: bold;
+    }
+    .current-date {
+      background-color: #41679c;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+    .holiday {
+      color: red;
+      font-weight: bold;
+    }
+    .event {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    #latest-event p{
+      margin-top: 30px;
+    }
+    #chartContainer {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        #attendanceChart{
+          color:#ccc
+        }
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+       #atandpie{
+
+      margin: auto;
+      display: flex;
+      align-items: center;
+     
+      
+      padding: 10px;
+     
+      position: relative;
+      }
+        .atd{
+        z-index: -1;
+          top: 40px;
+          height: 300px;
+          width: 700px;
+          font-size: 20px;
+        max-width: auto;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+     flex-wrap: wrap;
+      position: relative;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+       }
+#atda{
+  display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+}
+
+       .attendance_details{
+        display: grid;
+        align-items: center;
+        justify-content: center;
+       }
+       h1{
+        text-align: center;
+        font-size: 30px;
+       }
+       h2{
+        color: #ffffff;
+       }
+      .attendance_details a{
+        text-decoration: none;
+        color: #ffffff;
+        margin-top: 20px;
+      }
+
+       /* resoponsive */
+@media screen and (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .calendar, .events {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+
+  .profile {
+    text-align: left;
+    flex-direction: row;
+  }
+
+  .profile img {
+    margin-bottom: 10px;
+  }
+
+  .profile-details {
+    align-items: left;
+  }
+
+  .atd{
+    height: max-content;
+  }
+  #atandpie {
+    flex-direction: row;
+    align-items: center;
+  }
+.atda{
+  text-align: left;
+}
+  .attendance_details {
+    text-align: left;
+  }
+
+  #chartContainer {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  .profile {
+    font-size: 18px;
+    padding: 15px;
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  .calendar th, .calendar td {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .dropdown-menu {
+    width: 150px;
+  }
+
+  .events h1 {
+    font-size: 22px;
+  }
+
+  #atandpie {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .atd {
+    width: 90%;
+  }
+
+  #chartContainer {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .profile {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .profile img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .menu-button {
+    font-size: 12px;
+  }
+
+  .calendar th, .calendar td {
+    padding: 5px;
+    font-size: 12px;
+  }
+
+  .events h1 {
+    font-size: 18px;
+  }
+
+  .events p {
+    font-size: 14px;
+  }
+
+  .attendance_details {
+    font-size: 14px;
+  }
+
+  .atd {
+    width: 95%;
+  }
+
+  #chartContainer {
+    width: 100%;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+<!-- Student Profile Section -->
+<div class="profile">
+  <img src="{{ url_for('profile_picture', user_id=user.id) }}" onerror="this.onerror=null; this.src='https://www.pngmart.com/files/23/Profile-PNG-Photo.png';" 
+  alt="Profile Image" 
+  class="profile-img">
+  <div class="profile-details">
+    <p><strong>Name:</strong> <span id="user-name"></span></p>
+    <p><strong>Roll No:</strong> <span id="user-rollno"></span></p>
+    <!-- <p><strong>Reg No:</strong> <span id="user-regno"></span></p> -->
+    <p><strong>Class:</strong> <span id="user-class"></span></p>
+    <p><strong>Section:</strong> <span id="user-section"></span></p>
+    <!-- <p><strong>Phone:</strong> <span id="user-phone"></span></p>
+    <p><strong>Gmail:</strong> <span id="user-gmail"></span></p> -->
+
+  </div>
+  <!-- Three dots button -->
+  <button class="menu-button" title="Options"><h2>≣</h2></button>
+  <!-- Dropdown Menu -->
+  <div class="dropdown-menu">
+    <a href="profile">Profile</a>
+    <a href="/home">Home</a>
+    <a href="/display">Time table</a>
+    <a href="/view_marks">marks</a>
+    <a href="/clgcalendar">College Calendar</a>
+    <a href="/event_newss">Events and News</a>
+    <a href="/chart">Charts and Graphs</a>
+  </div>
+</div>
+
+<div class="atd">
+  <h1>Student Attendance Details</h3>
+<div id="atandpie">
+<div id="atda"><div class="attendance_details"></div>
+
+</div>
+
+
+    <div class="attendance_details" style="text-align: center;"></div>
+    <div id="chartContainer">
+        <canvas id="attendanceChart"></canvas> <!-- Pie Chart Canvas -->
+    </div>
+  </div>
+</div>
+
+
+<div class="attendance_details">
+  <a href="/att_detail">Click here to more Attendance Information</a>
+</div>
+
+
+
+
+<!-- Calendar and Events Section -->
+<div class="container">
+  <!-- Calendar Section -->
+  <div class="calendar">
+    <h1>College Calendar</h1>
+    <table>
+      <thead>
+        <tr>
+          <th class="day-header">Mon</th>
+          <th class="day-header">Tue</th>
+          <th class="day-header">Wed</th>
+          <th class="day-header">Thu</th>
+          <th class="day-header">Fri</th>
+          <th class="day-header">Sat</th>
+          <th class="day-header">Sun</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Calendar will be generated dynamically here -->
+      </tbody>
+    </table>
+  </div>
+
+<!-- Events Section -->
+<div class="events">
+  <h1>College Latest Event</h1>
+  <div id="latest-event">
+      <p><strong>Title:</strong> <span id="event-title">Loading...</span></p>
+      <p><strong>Guest:</strong> <span id="event-guest">Loading...</span></p>
+      <p><strong>Date:</strong> <span id="event-date">Loading...</span></p>
+      <p><strong>Time:</strong> <span id="event-time">Loading...</span></p>
+  </div>
+</div>
+</div>
+
+
+
+<script>
+  function fetchUserProfile() {
+    fetch("/profile_data")  // Fetch user profile details
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert("Error: " + data.error);
+        } else {
+          document.getElementById("user-name").innerText = data.name;
+          document.getElementById("user-rollno").innerText = data.rollno;
+          document.getElementById("user-class").innerText = data.class_name;
+          document.getElementById("user-section").innerText = data.section;
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching user profile:", error);
+      });
+  }
+  function fetchAttendance() {
+    fetch("/student_attendance")
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          document.querySelector(".attendance_details").innerHTML = `<p>Error: ${data.error}</p>`;
+        } else {
+          document.querySelector(".attendance_details").innerHTML = `
+            <p><strong>Attended Classes:</strong> ${data.attended}</p>
+            <p><strong>Total Classes:</strong> ${data.total_classes}</p>
+            <p><strong>Attendance Percentage:</strong> ${data.percentage}</p>
+          `;
+
+          updateAttendanceChart(data.attended, data.total_classes);
+        }
+      })
+      .catch(error => console.error("Error fetching attendance:", error));
+}
+
+// Fetch attendance every 10 seconds (real-time update)
+setInterval(fetchAttendance, 10000);
+
+// Fetch immediately on page load
+fetchAttendance();
+  
+
+let attendanceChart;
+function updateAttendanceChart(attended, total) {
+    const absent = total - attended;
+    const ctx = document.getElementById("attendanceChart").getContext("2d");
+
+    if (attendanceChart) {
+        attendanceChart.data.datasets[0].data = [attended, absent];
+        attendanceChart.update();
+    } else {
+        attendanceChart = new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: ["Attended", "Absent"],
+                datasets: [{
+                    data: [attended, absent],
+                    backgroundColor: ["#4CAF50", "#FF5733"],
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: { legend: { position: "top" } }
+            }
+        });
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetchAttendance();  
+    setInterval(fetchAttendance, 5000);  // Fetch every 5 seconds
+});
+
+  // Dropdown Menu Toggle
+  const menuButton = document.querySelector('.menu-button');
+  const dropdownMenu = document.querySelector('.dropdown-menu');
+
+  menuButton.addEventListener('click', () => {
+    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Close the menu if clicked outside
+  document.addEventListener('click', (event) => {
+    if (!menuButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+      dropdownMenu.style.display = 'none';
+    }
+  });
+
+  // Generate calendar for the current month and year
+  function generateCalendar(month, year) {
+    const tbody = document.querySelector(".calendar tbody");
+    tbody.innerHTML = ""; // Clear any existing rows
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+
+    const holidays = [
+      { day: 26, month: 0 }, // Republic Day (26th January)
+      { day: 15, month: 7 }, // Independence Day (15th August)
+      { day: 2, month: 9 }   // Gandhi Jayanti (2nd October)
+    ];
+
+    let date = 1;
+    for (let i = 0; i < 6; i++) {
+      const row = document.createElement("tr");
+
+      for (let j = 0; j < 7; j++) {
+        const cell = document.createElement("td");
+
+        if (i === 0 && j < (firstDay === 0 ? 6 : firstDay - 1)) {
+          cell.textContent = ""; // Empty cell before the first day of the month
+        } else if (date > daysInMonth) {
+          break; // No more dates in the month
+        } else {
+          cell.textContent = date;
+
+          // Highlight Sundays and holidays
+          const isSunday = j === 6;
+          const isHoliday = holidays.some(
+            (holiday) => holiday.day === date && holiday.month === month
+          );
+
+          if (isSunday || isHoliday) {
+            cell.classList.add("holiday");
+          }
+
+          // Highlight current date
+          if (
+            date === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear()
+          ) {
+            cell.classList.add("current-date");
+          }
+          date++;
+        }
+        row.appendChild(cell);
+      }
+
+      tbody.appendChild(row);
+
+      // Stop creating rows if we've reached the end of the month
+      if (date > daysInMonth) {
+        break;
+      }
+    }
+  }
+
+  // Get current month and year
+  const today = new Date();
+  const currentMonth = today.getMonth(); // 0-based index
+  const currentYear = today.getFullYear();
+
+  // Generate the calendar for the current month and year
+  generateCalendar(currentMonth, currentYear);
+
+     // Fetch user profile data
+  function fetchUserProfile() {
+    fetch("/dash_data")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById("user-name").innerText = data.name;
+        document.getElementById("user-rollno").innerText = data.rollno;
+        document.getElementById("user-class").innerText = data.class_name;
+        document.getElementById("user-section").innerText = data.section;
+
+      })
+      .catch(error => {
+        console.error("Error fetching user data:", error);
+        alert('Failed to load profile data. Please try again later or login your account.');
+      });
+  }
+
+  // Call the function on page load
+  window.onload = fetchUserProfile;
+
+  function fetchLatestEvent() {
+        fetch('/api/latest_event')  // Calls the Flask API route
+        .then(response => response.json()) // Convert response to JSON
+        .then(data => {
+            if (data.event) {
+                document.getElementById("event-title").textContent = data.event.title;
+                document.getElementById("event-guest").textContent = data.event.guest;
+                document.getElementById("event-date").textContent = data.event.date;
+                document.getElementById("event-time").textContent = data.event.time;
+            } else {
+                document.getElementById("latest-event").innerHTML = "<p>No upcoming events.</p>";
+            }
+        })
+        .catch(error => console.error("Error fetching latest event:", error));
+    }
+
+    // Fetch latest event on page load
+    document.addEventListener("DOMContentLoaded", fetchLatestEvent);
+
+</script>
+
+</body>
+</html>

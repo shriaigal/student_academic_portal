@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    overflow-x: hidden;
+}
+
+/* Header */
+header {
+    background-color:rgba(21, 35, 167, 0.832) ;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+header img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid white;
+    margin-right: 15px;
+}
+
+header h1 {
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    background: #007bff;
+    padding: 15px;
+    gap: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+nav a:hover {
+    background: white;
+    color: #007bff;
+}
+
+/* Slider */
+.slider {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slides img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.navigation-slider {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.navigation-slider button {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.navigation-slider button:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.dots {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dot.active {
+    background-color: #007bff;
+}
+
+/* Table */
+.table-container {
+    width: 90%;
+    margin: 40px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #007bff;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+tr:hover {
+    background: rgba(0, 123, 255, 0.1);
+    transition: 0.3s;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    background: #1f1c2c;
+    color: white;
+    font-size: 14px;
+    margin-top: 30px;
+}
+
+/* Password Lock Screen */
+#locked-screen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(111, 70, 135);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#lock {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+#lock h1 {
+    margin-bottom: 10px;
+    font-size: 1.8em;
+}
+
+#lock input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+
+#lock button {
+    width: 100%;
+    padding: 10px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+#lock button:hover {
+    background: #218838;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .table-container {
+        width: 100%;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+
+<!-- <div id="locked-screen">
+    <div id="lock">
+        <h1> Admin Login</h1>
+        <input type="password" id="password" placeholder="Enter Password">
+        <br>
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+</div> -->
+
+<header>
+    <img src="https://lh3.googleusercontent.com/pw/AP1GczO9Gnycq52VTcW15DUB-0flHLbXFBPhkNlrCvw111TTC5S8vqSVEzKzOK32C949TagfuIy6AWmRrwtHCsgVpmCznwoTQpEmln3cJeCKAPZaD-AXkvqDvDgo3rVkt5uW5YlWUdXf3SwE7Gnyd042aOJu=w913-h913-s-no-gm?authuser=0" alt="Logo">
+    <h1>Attendance Management System</h1>
+</header>
+
+<nav>
+    <a href="/homepage1">Home</a>
+    <a href="/qr_code">QR Code</a>
+    <a href="/admindata">View Data</a>
+    <a href="/attendance_dashboard">Fetch Data</a>
+    <a href="/sliderimg">Update Slider Images</a>
+    <a href="/time_table">Update Class Time Table</a>
+    <a href="/display">view Time Table</a>
+    <a href="/update_delete">Update user data</a>
+</nav>
+
+<!-- Slider Section -->
+<!-- <section class="slider">
+    <div class="slides">
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczPhLcxiF1D5EGFWkaJpdGAO35RkE8Z6eqaIX6AOD7Pj5QoUYpnNwWWt42nHFG1JjU82FOQXIzF7HiCynNW2RfKQ23tElW6iOHOWSwGY9CGbdQz4-Vpa7_JsiLJyHfANXrdVv8LIQoeTbJmp09JPlB8f=w1600-h390-s-no-gm?authuser=0" alt="Slide 1">
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczObUM4FrnZHmmlbWpEIr1XXaaiWxK4ul8d2mHDt159wnq-HoBsTHCfpwlapDQpdPuj0n7nHalj_E-JWma41UyZYSDeM_fAi5JgacRq0095NOZ1ji3TZRA2aV0iiQYbMOkj-3wOHrGtd6HK6PW9cQXZg=w1600-h391-s-no-gm?authuser=0" alt="Slide 2">
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczPO81si0XTw6GFumg6EjN3SBY7c7jguj7rrCktIsHXKVh5I4_JTmjuDMVyMGa6XZqxOBCFOFN6EJpuDHoxZ76s2MjdsS7bivnScA9LiSYFblIVRlG1fuHQOSR6rM5TpXbBXZPkF8Vjc_tLN9y12xp-Y=w1600-h392-s-no-gm?authuser=0" alt="Slide 3">
+    </div>
+    <div class="navigation-slider">
+      <button id="prev">⟨</button>
+      <button id="next">⟩</button>
+    </div>
+    <div class="dots">
+      <div class="dot active" data-index="0"></div>
+      <div class="dot" data-index="1"></div>
+      <div class="dot" data-index="2"></div>
+    </div>
+  </section> -->
+
+
+<div id="table">
+  <div id="innertable">
+  <h2 style="text-align: center; margin-top: 20px;margin-bottom: -30px;">Real- Time Student Attendance</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Roll No</th>
+                    <th>Login Time</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="admin-table-body">
+                <!-- Data will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <div class="buttons">
+        <!-- <button onclick="fetchAdmins()">Refresh</button> -->
+        <button onclick="clearTable()">Clear</button>
+    </div>
+  </div>
+</div>
+</div>
+<footer>
+    © 2024 Attendance Management System
+</footer>
+
+<script>
+
+
+
+
+function fetchAdmins() {
+            fetch('/get_logged_in_admins')
+            .then(response => response.json())
+            .then(data => {
+                let tableBody = document.getElementById("admin-table-body");
+                let today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+                let existingUserIds = new Set();
+                
+                // Store existing User IDs in a set
+                Array.from(tableBody.getElementsByTagName("tr")).forEach(row => {
+                    existingUserIds.add(row.cells[0]?.innerText);
+                });
+
+                data.forEach(admin => {
+                    if (admin.date === today) {
+                        // Remove existing row if User ID already exists
+                        if (existingUserIds.has(admin.user_id.toString())) {
+                            let existingRow = Array.from(tableBody.getElementsByTagName("tr")).find(row => row.cells[0]?.innerText === admin.user_id.toString());
+                            if (existingRow) {
+                                existingRow.remove();
+                            }
+                        }
+                        
+                        // Add new row at the top
+                        let row = document.createElement("tr");
+                        row.innerHTML = `<td>${admin.user_id}</td>
+                                         <td>${admin.name}</td>
+                                         <td>${admin.rollno}</td>
+                                         <td>${admin.login_time}</td>
+                                         <td>${admin.date}</td>`;
+                        tableBody.prepend(row); // Add new data at the beginning
+                        existingUserIds.add(admin.user_id.toString());
+                    }
+                });
+            })
+            .catch(error => console.error("Error fetching data:", error));
+        }
+
+        function clearTable() {
+            document.getElementById("admin-table-body").innerHTML = "";
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchAdmins();  
+            setInterval(fetchAdmins, 5000);
+        });
+
+
+
+
+
+   // Password protection logic
+const PASSWORD = "shri@123";
+
+// Lock the page
+const lockedScreen = document.getElementById("locked-screen");
+lockedScreen.style.display = "flex";
+
+// Function to check the password
+function checkPassword() {
+    const inputPassword = document.getElementById("password").value;
+    if (inputPassword === PASSWORD) {
+        lockedScreen.style.display = "none"; // Unlock the page
+    } else {
+        alert("Incorrect password. Try again.");
+    }
+}
+
+   // Check if the loading screen has already been shown
+    window.addEventListener('load', () => {
+      if (!sessionStorage.getItem('loadingShown')) {
+        // Show the loading screen for the first time
+        setTimeout(() => {
+          document.getElementById('loading-screen').style.display = 'none';
+          document.getElementById('main-content').style.display = 'block';
+        }, 3000); // 3 seconds
+
+        // Mark that the loading screen has been shown
+        sessionStorage.setItem('loadingShown', 'true');
+      } else {
+        // Skip the loading screen on subsequent visits
+        document.getElementById('loading-screen').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+      }
+    });
+
+   const slides = document.querySelector(".slides");
+const images = document.querySelectorAll(".slides img");
+const dots = document.querySelectorAll(".dot");
+const prevButton = document.getElementById("prev");
+const nextButton = document.getElementById("next");
+
+let currentIndex = 0;
+let slideWidth = images[0].clientWidth;
+const totalSlides = images.length;
+
+// Clone first and last slides
+const firstClone = images[0].cloneNode(true);
+const lastClone = images[totalSlides - 1].cloneNode(true);
+
+// Append clones
+slides.appendChild(firstClone);
+slides.insertBefore(lastClone, slides.firstChild);
+
+// Update new total slides count
+const updatedSlides = document.querySelectorAll(".slides img");
+const updatedTotalSlides = updatedSlides.length;
+
+// Adjust slider position to show the first real image
+slides.style.transform = `translateX(-${slideWidth}px)`;
+
+function updateDots(index) {
+  dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+}
+
+function goToSlide(index) {
+  slides.style.transition = "transform 0.5s ease-in-out";
+  slides.style.transform = `translateX(-${(index + 1) * slideWidth}px)`;
+  currentIndex = index;
+  updateDots(currentIndex);
+}
+
+// Handle next slide with looping
+function nextSlide() {
+  if (currentIndex >= totalSlides - 1) {
+    slides.style.transition = "transform 0.5s ease-in-out";
+    goToSlide(currentIndex + 1);
+    slides.addEventListener(
+      "transitionend",
+      () => {
+        slides.style.transition = "none";
+        slides.style.transform = `translateX(-${slideWidth}px)`;
+        currentIndex = 0;
+      },
+      { once: true }
+    );
+  } else {
+    goToSlide(currentIndex + 1);
+  }
+}
+
+// Handle previous slide with looping
+function prevSlide() {
+  if (currentIndex <= 0) {
+    slides.style.transition = "transform 0.5s ease-in-out";
+    goToSlide(currentIndex - 1);
+    slides.addEventListener(
+      "transitionend",
+      () => {
+        slides.style.transition = "none";
+        slides.style.transform = `translateX(-${totalSlides * slideWidth}px)`;
+        currentIndex = totalSlides - 1;
+      },
+      { once: true }
+    );
+  } else {
+    goToSlide(currentIndex - 1);
+  }
+}
+
+// Auto-slide every 3 seconds
+let autoSlide = setInterval(() => {
+  nextSlide();
+}, 3000);
+
+// Event Listeners
+nextButton.addEventListener("click", () => {
+  clearInterval(autoSlide);
+  nextSlide();
+  autoSlide = setInterval(nextSlide, 3000);
+});
+
+prevButton.addEventListener("click", () => {
+  clearInterval(autoSlide);
+  prevSlide();
+  autoSlide = setInterval(nextSlide, 3000);
+});
+
+dots.forEach((dot, i) => {
+  dot.addEventListener("click", () => {
+    clearInterval(autoSlide);
+    goToSlide(i);
+    autoSlide = setInterval(nextSlide, 3000);
+  });
+});
+
+window.addEventListener("resize", () => {
+  slideWidth = images[0].clientWidth;
+  slides.style.transition = "none";
+  slides.style.transform = `translateX(-${(currentIndex + 1) * slideWidth}px)`;
+});
+
+window.onload = () => {
+  slideWidth = images[0].clientWidth;
+  slides.style.transform = `translateX(-${slideWidth}px)`;
+};
+
+</script>
+
+
+</body>
+</html>

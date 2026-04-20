@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Calendar</title>
+</head>
+<style>
+    body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .jai{
+        width:1000px;
+        height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+        .calendar, .events {
+      border: 1px solid #e3e2e2;
+      border-radius: 5px;
+      padding: 10px;
+      width: 48%;
+      background-color: #f9f9f9;
+    }
+    .calendar table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .calendar th {
+      background-color: #eee;
+      padding: 5px;
+      text-align: center;
+    }
+    .calendar td {
+      padding: 5px;
+      text-align: center;
+    }
+    .calendar td:hover {
+      opacity: 0.5;
+      background-color: #9eeea6;
+      border-radius: 5px;
+    }
+    .day-header {
+      font-weight: bold;
+    }
+    .current-date {
+      background-color: #cfe3ff;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+    .holiday {
+      color: red;
+      font-weight: bold;
+    }
+</style>
+<body>
+    <div id="container">
+        <div class="jai">
+            
+    <div class="calendar">
+        <h1 style="text-align: center;">College Calendar</h1>
+        <table>
+          <thead>
+            <tr>
+              <th class="day-header">Mon</th>
+              <th class="day-header">Tue</th>
+              <th class="day-header">Wed</th>
+              <th class="day-header">Thu</th>
+              <th class="day-header">Fri</th>
+              <th class="day-header">Sat</th>
+              <th class="day-header">Sun</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Calendar will be generated dynamically here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+</body>
+<script>
+
+    // Generate calendar for the current month and year
+    function generateCalendar(month, year) {
+      const tbody = document.querySelector(".calendar tbody");
+      tbody.innerHTML = ""; // Clear any existing rows
+  
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+  
+      const holidays = [
+        { day: 26, month: 0 }, // Republic Day (26th January)
+        { day: 15, month: 7 }, // Independence Day (15th August)
+        { day: 2, month: 9 }   // Gandhi Jayanti (2nd October)
+      ];
+  
+      let date = 1;
+      for (let i = 0; i < 6; i++) {
+        const row = document.createElement("tr");
+  
+        for (let j = 0; j < 7; j++) {
+          const cell = document.createElement("td");
+  
+          if (i === 0 && j < (firstDay === 0 ? 6 : firstDay - 1)) {
+            cell.textContent = ""; // Empty cell before the first day of the month
+          } else if (date > daysInMonth) {
+            break; // No more dates in the month
+          } else {
+            cell.textContent = date;
+  
+            // Highlight Sundays and holidays
+            const isSunday = j === 6;
+            const isHoliday = holidays.some(
+              (holiday) => holiday.day === date && holiday.month === month
+            );
+  
+            if (isSunday || isHoliday) {
+              cell.classList.add("holiday");
+            }
+  
+            // Highlight current date
+            if (
+              date === today.getDate() &&
+              month === today.getMonth() &&
+              year === today.getFullYear()
+            ) {
+              cell.classList.add("current-date");
+            }
+            date++;
+          }
+          row.appendChild(cell);
+        }
+  
+        tbody.appendChild(row);
+  
+        // Stop creating rows if we've reached the end of the month
+        if (date > daysInMonth) {
+          break;
+        }
+      }
+    }
+  
+    // Get current month and year
+    const today = new Date();
+    const currentMonth = today.getMonth(); // 0-based index
+    const currentYear = today.getFullYear();
+  
+    // Generate the calendar for the current month and year
+    generateCalendar(currentMonth, currentYear);
+  
+
+</script>
+</html>

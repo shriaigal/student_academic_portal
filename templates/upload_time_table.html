@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Images</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+h2 {
+    color: #ffcc00;
+}
+
+form {
+    background-color: #121212;
+    border-radius: 10px;
+    max-width: 800px;
+    
+
+}
+
+table {
+   
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    
+    padding: 10px;
+    border: 1px solid #444;
+    text-align: center;
+}
+
+th {
+    background-color: #ffcc00;
+    color: #121212;
+}
+
+td b {
+    color: #ffcc00;
+}
+
+input[type="file"] {
+    width: 90%;
+    background-color: #333;
+    color: #ffffff;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 5px;
+}
+/* Styling file input to make it look better */
+input[type="file"]::-webkit-file-upload-button {
+            background-color: #333;
+            color: #fff;
+            
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::-webkit-file-upload-button:hover {
+            background-color: #222;
+        }
+
+button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #ffcc00;
+    border: none;
+    color: #121212;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #e6b800;
+}
+
+    </style>
+</head>
+<body>
+    <h2>Upload class Time table</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <th></th>
+                <th>A</th>
+                <th>B</th>
+            </tr>
+            <tr>
+                <td><b>I BCA</b></td>
+                <td>
+                    <input type="file" name="I_BCA_A" accept="image/*" required>
+                </td>
+                <td>
+                    <input type="file" name="I_BCA_B" accept="image/*" required>
+                </td>
+            </tr>
+            <tr>
+                <td><b>II BCA</b></td>
+                <td>
+                    <input type="file" name="II_BCA_A" accept="image/*" required>
+                </td>
+                <td>
+                    <input type="file" name="II_BCA_B" accept="image/*" required>
+                </td>
+            </tr>
+            <tr>
+                <td><b>III BCA</b></td>
+                <td>
+                    <input type="file" name="III_BCA_A" accept="image/*" required>
+                </td>
+                <td>
+                    <input type="file" name="III_BCA_B" accept="image/*" required>
+                </td>
+            </tr>
+        </table>
+        <button type="submit">Upload</button>
+    </form>
+
+</body>
+</html>

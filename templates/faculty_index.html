@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Faculty Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #111827; /* Tailwind's bg-gray-900 */
+      color: white;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container-center {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .dashboard-title {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .grid-layout {
+      display: grid;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    /* First Row Layout */
+    @media (max-width: 639px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 640px) and (max-width: 1023px) {
+      .grid-layout {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid-layout {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .card {
+      background-color: #1f2937;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon {
+      font-size: 2rem;
+    }
+
+    .title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 0.75rem;
+    }
+
+    .description {
+      color: #d1d5db;
+      margin-top: 0.5rem;
+      flex-grow: 1;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      font-weight: 500;
+      color: white;
+      background-color: #3b82f6;
+      transition: background-color 0.2s ease-in-out;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #1e40af;
+    }
+
+    /* Centered wrapper for second row card */
+    .second-row-center {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Optional: Width control for centered card */
+    .card.single {
+      width: 100%;
+      max-width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-center">
+    <div>
+      <h1 class="dashboard-title">Faculty Dashboard</h1>
+
+      <!-- First Row (3 Cards) -->
+      <div class="grid-layout">
+        <div class="card">
+          <div class="icon">📊</div>
+          <h2 class="title">Upload Student Marks</h2>
+          <p class="description">Upload student marks for assessments.</p>
+          <a href="/student_marks" class="btn">Upload</a>
+        </div>
+
+        <div class="card">
+          <div class="icon">📅</div>
+          <h2 class="title">Upload Class Time Table</h2>
+          <p class="description">Upload the latest class schedule.</p>
+          <a href="/time_table" class="btn">Upload</a>
+        </div>
+
+        <div class="card">
+          <div class="icon">🎓</div>
+          <h2 class="title">Student Marks</h2>
+          <p class="description">View detailed Student marks.</p>
+          <a href="/display_marks_by_class_and_section" class="btn">View</a>
+        </div>
+      </div>
+
+      <!-- Second Row (Centered Single Card) -->
+      <div class="second-row-center">
+        <div class="card single">
+          <div class="icon">📖</div>
+          <h2 class="title">View Time Table</h2>
+          <p class="description">View detailed Class time table.</p>
+          <a href="/display" class="btn">View</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

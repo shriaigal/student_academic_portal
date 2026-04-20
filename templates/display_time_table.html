@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Time Table</title>
+
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .container {
+            width: 90%;
+            padding: 20px;
+            text-align: center;
+            
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+           
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: rgb(255, 255, 255);
+            text-transform: uppercase;
+            font-size: 26px;
+            font-weight: bold;
+            
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            overflow: hidden;
+            
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.2);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        td {
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 16px;
+        }
+
+        /* Image Styling */
+        img {
+            width: 500px;
+            height: 250px;
+            border-radius: 10px;
+            
+            transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.03);
+           
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            img {
+                width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- <h2>Class Time Table</h2> -->
+        <table>
+            <tr>
+                <th></th>
+                <th colspan="2">Class Time Table</th>
+            </tr>
+            <tr>
+                <th>Class</th>
+                <th>A</th>
+                <th>B</th>
+            </tr>
+            <tr>
+                <td><b>I BCA</b></td>
+                <td><a id="link_I_BCA_A" download="I_BCA_A.jpg"><img id="I_BCA_A" src="" alt="I BCA A"></a></td>
+                <td><a id="link_I_BCA_B" download="I_BCA_B.jpg"><img id="I_BCA_B" src="" alt="I BCA B"></a></td>
+            </tr>
+            <tr>
+                <td><b>II BCA</b></td>
+                <td><a id="link_II_BCA_A" download="II_BCA_A.jpg"><img id="II_BCA_A" src="" alt="II BCA A"></a></td>
+                <td><a id="link_II_BCA_B" download="II_BCA_B.jpg"><img id="II_BCA_B" src="" alt="II BCA B"></a></td>
+            </tr>
+            <tr>
+                <td><b>III BCA</b></td>
+                <td><a id="link_III_BCA_A" download="III_BCA_A.jpg"><img id="III_BCA_A" src="" alt="III BCA A"></a></td>
+                <td><a id="link_III_BCA_B" download="III_BCA_B.jpg"><img id="III_BCA_B" src="" alt="III BCA B"></a></td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        // Function to fetch images and update the table dynamically
+        function loadImages() {
+            fetch('/get_images')
+                .then(response => response.json())
+                .then(data => {
+                    Object.keys(data).forEach(category => {
+                        let imgElement = document.getElementById(category.replace(" ", "_"));
+                        let linkElement = document.getElementById("link_" + category.replace(" ", "_"));
+
+                        if (imgElement && linkElement && data[category]) {
+                            let imageSrc = "data:image/jpeg;base64," + data[category];
+                            imgElement.src = imageSrc;
+                            linkElement.href = imageSrc; // Set the download link
+                        } else if (imgElement) {
+                            imgElement.alt = "No Image Available";
+                        }
+                    });
+                })
+                .catch(error => console.error("Error loading images:", error));
+        }
+
+        // Load images when the page loads
+        window.onload = loadImages;
+    </script>
+
+</body>
+</html>

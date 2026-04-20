@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feedback</title>
+    <style>
+        /* feedback.css */
+
+/* Basic Reset */
+* {
+    box-sizing: border-box;
+}
+
+/* Body & Centering */
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: #1f2937; /* Tailwind bg-gray-900 */
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container */
+.form-container {
+    background-color: #374151; /* Tailwind bg-gray-800 */
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+    width: 24rem; /* approx 384px */
+    text-align: center;
+}
+
+/* Heading */
+.form-container h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+/* Labels */
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+/* Inputs & Textarea */
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #4b5563; /* Tailwind bg-gray-700 */
+    border: 1px solid #4b5563; /* Tailwind border-gray-600 */
+    border-radius: 0.375rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+    resize: vertical;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: #6366f1; /* Tailwind ring-indigo-500 */
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+    transform: scale(1.02);
+}
+
+/* Submit Button */
+button[type="submit"] {
+    width: 100%;
+    padding: 0.5rem 0;
+    background-color: #4f46e5; /* Tailwind bg-indigo-600 */
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #4338ca; /* Tailwind bg-indigo-700 */
+    transform: translateY(-2px);
+}
+
+/* Success Message */
+#successMessage {
+    margin-top: 1rem;
+    color: #34d399; /* Tailwind text-green-400 */
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .form-container {
+        width: 90%;
+        padding: 1rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Feedback Form</h2>
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required />
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+                <label for="message">Feedback</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <p id="successMessage" class="hidden">Thank you for your feedback!</p>
+    </div>
+
+    <script>
+        document.getElementById("feedbackForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const formData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                message: document.getElementById("message").value
+            };
+
+            const response = await fetch("/submit_feedback", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                document.getElementById("feedbackForm").reset();
+                document.getElementById("successMessage").classList.remove("hidden");
+                setTimeout(() => {
+                    document.getElementById("successMessage").classList.add("hidden");
+                    window.location.href = "/";
+                }, 2000);
+            } else {
+                alert("Error submitting feedback. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
