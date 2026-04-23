@@ -22,6 +22,9 @@ import json
 #port: http://127.0.0.1:5000/
 #name @admin and password admin@123
 
+
+
+
 app = Flask(__name__, template_folder='/SAP/templates')
 app.config['SECRET_KEY'] = '2004'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ams.db'
