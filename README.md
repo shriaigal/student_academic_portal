@@ -1,4 +1,4 @@
-# 📘 Student Attendance Management System (SAP)
+# 📘 Student Attendance Management System (SAP).
 
 A full-featured Flask-based web application designed to digitize and streamline attendance tracking, student performance management, and academic administration.
 
